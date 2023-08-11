@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "my-nextron-app",
+  "name": "Importer faktur Allegro",
   "description": "Aplikacja importujaca faktury z allegro do fakturowni",
   "version": "1.2.0",
   "author": "Aleks Zych",
