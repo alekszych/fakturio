@@ -1,7 +1,7 @@
 import React, {useContext, useState} from "react"
 import {AuthContext} from "../_app"
 import {axiosInstance} from "../../axios"
-import useErrorHandler from "../hooks/useErrorHandler"
+import useErrorHandler from "../../hooks/useErrorHandler"
 
 const CreateInvoicesButton = ({setInvoices, checked, setChecked}) => {
 	const {account} = useContext(AuthContext)
@@ -9,7 +9,7 @@ const CreateInvoicesButton = ({setInvoices, checked, setChecked}) => {
 	const handleCreateInvoices = async () => {
 		setHideCreateInvoices(true)
 		const {data: responseData} = await axiosInstance.post("/fakturownia/invoice", {data: checked, account: account})
-		useErrorHandler(responseData, () => {
+		useErrorHandler(responseData, async () => {
 			setInvoices(invoices => invoices.concat(responseData))
 			setChecked([])
 			alert("Faktury zostały utworzone!")

@@ -14,6 +14,7 @@ const createTableAccountData = () => {
 				table.string("country")
 				table.string("lumpSumTax")
 				table.string("vat")
+				table.string("exemptTaxKind")
 			})
 		}
 	})

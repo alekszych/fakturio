@@ -44,7 +44,7 @@ accountRouter.delete("/", async (req, res) => {
 
 accountRouter.post("/data", async (req, res) => {
 	try {
-		const {account, name, taxNo, street, postCode, city, country, lumpSumTax, vat} = req.body
+		const {account, name, taxNo, street, postCode, city, country, lumpSumTax, vat, exemptTaxKind} = req.body
 		await knex("accountData").where("accountId", account.id).del()
 		await knex("accountData").insert({
 			accountId: account.id,
@@ -55,7 +55,8 @@ accountRouter.post("/data", async (req, res) => {
 			city: city,
 			country: country,
 			lumpSumTax: lumpSumTax,
-			vat: vat
+			vat: vat,
+			exemptTaxKind: exemptTaxKind
 		})
 		res.status(200).json({message: "Dane zostały zmienione"})
 	}

@@ -9,19 +9,28 @@ fakturowniaRouter.post("/invoice", async (req, res) => {
 	try {
 		const {data, account} = req.body
 		const accountData = await knex.where("accountId", account.id).select().table("accountData")
-		const cleanAccountData = accountData[0]
 		const accounts = await knex.where("id", account.id).select().table("account")
+		const {name: sellerName,
+			taxNo: sellerTaxNo,
+			street: sellerStreet,
+			postCode: sellerPostCode,
+			city: sellerCity,
+			country: sellerCountry,
+			lumpSumTax: sellerLumpSumTax,
+			vat: sellerVat,
+			exemptTaxKind: sellerExemptTaxKind
+		} = accountData[0]
 		const {fakturowniaToken, fakturowniaName} = accounts[0]
-		let invoices = []
 
+		let invoices = []
 		for (const record of data) {
 			const positions = record.products.map(product => {
 				return {
 					name: product.offer.name,
 					total_price_gross: product.price.amount,
 					quantity: product.quantity,
-					"lump_sum_tax": cleanAccountData.lumpSumTax,
-					"tax": cleanAccountData.vat
+					"lump_sum_tax": sellerLumpSumTax,
+					"tax": sellerVat
 				}
 			})
 
@@ -29,33 +38,38 @@ fakturowniaRouter.post("/invoice", async (req, res) => {
 				"name": "Koszty wysyłki",
 				"total_price_gross": record.deliveryCost,
 				"quantity": 1,
-				"lump_sum_tax": cleanAccountData.lumpSumTax,
-				"tax": cleanAccountData.vat
+				"lump_sum_tax": sellerLumpSumTax,
+				"tax": sellerVat
 			})
 
 			const currency = record.currency
-			const {firstName, lastName, street, city, zipCode, countryCode, company} = record.invoice
+			const {firstName: buyerFirstname, lastName: buyerLastname, street: buyerStreet, city: buyerCity, zipCode: buyerZipCode, countryCode: buyerCountryCode, company: buyerCompany} = record.invoice
 			const invoice = {
 				"kind": "vat",
-				"seller_name": cleanAccountData.name,
-				"seller_tax_no": cleanAccountData.taxNo,
-				"seller_street": cleanAccountData.street,
-				"seller_post_code": cleanAccountData.postCode,
-				"seller_city": cleanAccountData.city,
-				"seller_country": cleanAccountData.country,
-				"buyer_post_code": zipCode,
-				"buyer_city": city,
-				"buyer_street": street,
-				"buyer_country": countryCode,
+				"seller_name": sellerName,
+				"seller_tax_no": sellerTaxNo,
+				"seller_street": sellerStreet,
+				"seller_post_code": sellerPostCode,
+				"seller_city": sellerCity,
+				"seller_country": sellerCountry,
+				"buyer_post_code": buyerZipCode,
+				"buyer_city": buyerCity,
+				"buyer_street": buyerStreet,
+				"buyer_country": buyerCountryCode,
 				"positions": positions,
-				"currency": currency
+				"currency": currency,
+				"place": sellerCity
 			}
-			if (firstName) {
-				invoice["buyer_first_name"] = firstName
-				invoice["buyer_last_name"] = lastName
-			} else if (company) {
-				invoice["buyer_name"] = company.name
-				invoice["buyer_tax_no"] = company.taxId
+			if (buyerFirstname) {
+				invoice["buyer_first_name"] = buyerFirstname
+				invoice["buyer_last_name"] = buyerLastname
+			} else if (buyerCompany) {
+				invoice["buyer_name"] = buyerCompany.name
+				invoice["buyer_tax_no"] = buyerCompany.taxId
+			}
+
+			if (sellerVat.toLowerCase() == "zw"){
+				invoice["exempt_tax_kind"] = sellerExemptTaxKind
 			}
 
 			const response = await axios.post(`https://${fakturowniaName}.fakturownia.pl/invoices.json`, {
@@ -75,6 +89,7 @@ fakturowniaRouter.post("/invoice", async (req, res) => {
 		res.status(200).json(invoices)
 	}
 	catch (e) {
+		console.log(e)
 		res.json({error: e.message, errorMessage: "Błąd podczas tworzenia faktur"})
 	}
 })

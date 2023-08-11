@@ -3,8 +3,7 @@ import CreateInvoicesButton from "./components/createInvoicesButton"
 import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
 import {axiosInstance} from "../axios"
-import useErrorHandler from "./hooks/useErrorHandler"
-
+import useErrorHandler from "../hooks/useErrorHandler";
 
 const Offers = () => {
 	const {token} = useContext(AuthContext)
@@ -16,7 +15,7 @@ const Offers = () => {
 	const [offers, setOffers] = useState([])
 	const getOffers = async () => {
 		const {data: responseData} = await axiosInstance.get("/allegro/offer", {params: {token: token}})
-		useErrorHandler(responseData, () => {
+		useErrorHandler(responseData, async () => {
 			setData([])
 			const {checkoutForms: fetchedOffers} = responseData
 			setOffers(fetchedOffers)

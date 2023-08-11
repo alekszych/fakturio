@@ -2,12 +2,12 @@ import React, {useContext, useEffect, useRef, useState} from "react"
 import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
 import {axiosInstance} from "../axios"
-import useErrorHandler from "./hooks/useErrorHandler"
+import useErrorHandler from "../hooks/useErrorHandler";
 
 const UserData = () => {
 	const {account} = useContext(AuthContext)
 	const router = useRouter()
-	const [userData, setUserData] = useState()
+	const [userData, setUserData] = useState({name: "", taxNo: "", street: "", postCode: "", city: "", country: "", lumpSumTax: "", vat: "", exemptTaxKind: ""})
 	const name = useRef<HTMLInputElement>()
 	const taxNo = useRef<HTMLInputElement>()
 	const street = useRef<HTMLInputElement>()
@@ -16,11 +16,12 @@ const UserData = () => {
 	const country = useRef<HTMLInputElement>()
 	const lumpSumTax = useRef<HTMLInputElement>()
 	const vat = useRef<HTMLInputElement>()
+	const exemptTaxKind = useRef<HTMLInputElement>()
 
 	useEffect(() => {
 		(async function() {
 			const {data: responseData} = await axiosInstance.get("/account/data", {params: {account: account}})
-			useErrorHandler(responseData, () => setUserData(responseData[0]))
+			useErrorHandler(responseData, async () => setUserData(responseData[0]))
 		})()
 	}, [])
 
@@ -36,7 +37,8 @@ const UserData = () => {
 			lumpSumTax.current.value === "" ||
 			!(["2", "3", "5.5", "8.5", "10", "12", "12.5", "14", "15", "17"].includes(lumpSumTax.current.value)) ||
 			vat.current.value === "" ||
-			!(["zw", "np", "0", "5", "7", "8", "23"].includes(vat.current.value))
+			!(["zw", "np", "0", "5", "7", "8", "23"].includes(vat.current.value)) ||
+			exemptTaxKind.current.value === ""
 		){
 			alert("Wpisz poprawne wartości do formularza")
 			return
@@ -50,14 +52,13 @@ const UserData = () => {
 			city: city.current.value,
 			country: country.current.value,
 			lumpSumTax: lumpSumTax.current.value,
-			vat: vat.current.value
+			vat: vat.current.value,
+			exemptTaxKind: exemptTaxKind.current.value
 		})
-		if("error" in responseData){
-			alert(responseData.error)
-			console.log(responseData.error)
-		} else {
+		useErrorHandler(responseData, async ()  =>  {
+			alert("Dane konta zostały zmienione")
 			await router.push("/offers")
-		}
+		})
 	}
 
 	return (
@@ -102,6 +103,11 @@ const UserData = () => {
 			<label className={"mb-2"}>
 				<p className={"text-white mb-1"}> Stawka VAT (zw, np, 0, 5, 7, 8, 23) </p>
 				<input className={"w-full h-8 rounded focus:outline-blue-300 px-2"} ref={vat} defaultValue={userData && "vat" in userData && userData.vat}/>
+			</label>
+
+			<label className={"mb-2"}>
+				<p className={"text-white mb-1"}> Podstawa zwolnienia z vat (opcjonalnie) </p>
+				<input className={"w-full h-8 rounded focus:outline-blue-300 px-2"} ref={exemptTaxKind} defaultValue={userData && "exemptTaxKind" in userData && userData.exemptTaxKind}/>
 			</label>
 
 			<div className={"flex justify-center"}>

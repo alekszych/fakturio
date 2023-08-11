@@ -1,7 +1,7 @@
 import React, {useRef} from "react"
 import { useRouter } from "next/router"
 import {axiosInstance} from "../axios"
-import useErrorHandler from "./hooks/useErrorHandler"
+import useErrorHandler from "../hooks/useErrorHandler";
 
 const AddAccount = () => {
 	const router = useRouter()

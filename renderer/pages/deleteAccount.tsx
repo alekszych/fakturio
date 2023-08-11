@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import AccountSelect from "./components/accountSelect"
 import {axiosInstance} from "../axios"
 import {useRouter} from "next/router"
-import useErrorHandler from "./hooks/useErrorHandler"
+import useErrorHandler from "../hooks/useErrorHandler";
 
 const DeleteAccount = () => {
 	const [account, setAccount] = useState("")
