@@ -3,7 +3,7 @@ import CreateInvoicesButton from "./components/createInvoicesButton"
 import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
 import {axiosInstance} from "../axios"
-import useErrorHandler from "../hooks/useErrorHandler";
+import useErrorHandler from "../hooks/useErrorHandler"
 
 const Offers = () => {
 	const {token} = useContext(AuthContext)

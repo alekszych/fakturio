@@ -2,13 +2,11 @@ import React, {useEffect, useState} from "react"
 import { Listbox } from "@headlessui/react"
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid"
 import { axiosInstance } from "../../axios"
-import useErrorHandler from "../../hooks/useErrorHandler";
-
+import useErrorHandler from "../../hooks/useErrorHandler"
 
 const classNames = (...classes) => {
 	return classes.filter(Boolean).join(" ")
 }
-
 const AccountSelect = ({account, setAccount}) => {
 	const [accounts, setAccounts] = useState([])
 	useEffect(() => {

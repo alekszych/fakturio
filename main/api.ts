@@ -23,7 +23,6 @@ appExpress.use("/account", accountRouter)
 appExpress.use("/allegro", allegroRouter)
 appExpress.use("/fakturownia", fakturowniaRouter)
 
-
 export default function api(){
 	return appExpress.listen(3010, () => {
 		console.log("Server listening")

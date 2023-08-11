@@ -1,6 +1,6 @@
-import {knex} from "../api";
+import {knex} from "../api"
 
- const createTableAccount = () => {
+const createTableAccount = () => {
 	 knex.schema.hasTable("account").then(function(exists) {
 		 if (!exists) {
 			 return knex.schema.createTable("account", (table) => {

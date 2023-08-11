@@ -1,5 +1,6 @@
 import {Router} from "express"
 import {knex} from "../api"
+import {Account, AccountData} from "../../types"
 
 const accountRouter = Router()
 
@@ -13,16 +14,17 @@ accountRouter.get("/", async (req, res) => {
 	}
 })
 
-accountRouter.post("/", async (req, res) => {
+accountRouter.post("/", async (req: { body: { allegroClientId: any; allegroClientSecret: any; fakturowniaToken: any; fakturowniaName: any; name: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { message: string; }): void; new(): any; }; }; json: (arg0: { error: any; errorMessage: string; }) => void; }) => {
 	try {
 		const {allegroClientId, allegroClientSecret, fakturowniaToken, fakturowniaName, name} = req.body
-		await knex("account").insert({
+		const data: Account = {
 			name: name,
 			allegroClientId: allegroClientId,
 			allegroClientSecret: allegroClientSecret,
 			fakturowniaName: fakturowniaName,
 			fakturowniaToken: fakturowniaToken
-		})
+		}
+		await knex("account").insert(data)
 		res.status(200).json({message: "Dane logowania zostały zmienione"})
 	}
 	catch (e) {
@@ -44,10 +46,10 @@ accountRouter.delete("/", async (req, res) => {
 
 accountRouter.post("/data", async (req, res) => {
 	try {
-		const {account, name, taxNo, street, postCode, city, country, lumpSumTax, vat, exemptTaxKind} = req.body
-		await knex("accountData").where("accountId", account.id).del()
-		await knex("accountData").insert({
-			accountId: account.id,
+		const {accountId, name, taxNo, street, postCode, city, country, lumpSumTax, vat, exemptTaxKind} = req.body
+		await knex("accountData").where("accountId", accountId).del()
+		const data: AccountData = {
+			accountId: accountId,
 			name: name,
 			taxNo: taxNo,
 			street: street,
@@ -57,7 +59,8 @@ accountRouter.post("/data", async (req, res) => {
 			lumpSumTax: lumpSumTax,
 			vat: vat,
 			exemptTaxKind: exemptTaxKind
-		})
+		}
+		await knex("accountData").insert(data)
 		res.status(200).json({message: "Dane zostały zmienione"})
 	}
 	catch (e) {

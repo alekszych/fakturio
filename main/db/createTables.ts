@@ -1,5 +1,5 @@
-import createTableAccount from "../tables/account";
-import createTableAccountData from "../tables/accountData";
+import createTableAccount from "../tables/account"
+import createTableAccountData from "../tables/accountData"
 
 const createTables = () => {
 	createTableAccount()

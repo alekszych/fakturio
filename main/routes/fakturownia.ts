@@ -1,16 +1,17 @@
 import {Router} from "express"
 import axios from "axios"
 import {knex} from "../api"
+import {AccountData} from "../../types"
 
 const fakturowniaRouter = Router()
-
 
 fakturowniaRouter.post("/invoice", async (req, res) => {
 	try {
 		const {data, account} = req.body
 		const accountData = await knex.where("accountId", account.id).select().table("accountData")
 		const accounts = await knex.where("id", account.id).select().table("account")
-		const {name: sellerName,
+		const {
+			name: sellerName,
 			taxNo: sellerTaxNo,
 			street: sellerStreet,
 			postCode: sellerPostCode,
@@ -19,7 +20,7 @@ fakturowniaRouter.post("/invoice", async (req, res) => {
 			lumpSumTax: sellerLumpSumTax,
 			vat: sellerVat,
 			exemptTaxKind: sellerExemptTaxKind
-		} = accountData[0]
+		}: AccountData = accountData[0]
 		const {fakturowniaToken, fakturowniaName} = accounts[0]
 
 		let invoices = []
@@ -89,7 +90,6 @@ fakturowniaRouter.post("/invoice", async (req, res) => {
 		res.status(200).json(invoices)
 	}
 	catch (e) {
-		console.log(e)
 		res.json({error: e.message, errorMessage: "Błąd podczas tworzenia faktur"})
 	}
 })

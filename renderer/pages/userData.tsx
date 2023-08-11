@@ -2,7 +2,8 @@ import React, {useContext, useEffect, useRef, useState} from "react"
 import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
 import {axiosInstance} from "../axios"
-import useErrorHandler from "../hooks/useErrorHandler";
+import useErrorHandler from "../hooks/useErrorHandler"
+import {AccountData} from "../../types"
 
 const UserData = () => {
 	const {account} = useContext(AuthContext)
@@ -37,14 +38,13 @@ const UserData = () => {
 			lumpSumTax.current.value === "" ||
 			!(["2", "3", "5.5", "8.5", "10", "12", "12.5", "14", "15", "17"].includes(lumpSumTax.current.value)) ||
 			vat.current.value === "" ||
-			!(["zw", "np", "0", "5", "7", "8", "23"].includes(vat.current.value)) ||
-			exemptTaxKind.current.value === ""
+			!(["zw", "np", "0", "5", "7", "8", "23"].includes(vat.current.value))
 		){
 			alert("Wpisz poprawne wartości do formularza")
 			return
 		}
-		const {data: responseData} = await axiosInstance.post("/account/data", {
-			account: account,
+		const data: AccountData = {
+			accountId: account.id,
 			name: name.current.value,
 			taxNo: taxNo.current.value,
 			street: street.current.value,
@@ -54,7 +54,8 @@ const UserData = () => {
 			lumpSumTax: lumpSumTax.current.value,
 			vat: vat.current.value,
 			exemptTaxKind: exemptTaxKind.current.value
-		})
+		}
+		const {data: responseData} = await axiosInstance.post("/account/data", data)
 		useErrorHandler(responseData, async ()  =>  {
 			alert("Dane konta zostały zmienione")
 			await router.push("/offers")

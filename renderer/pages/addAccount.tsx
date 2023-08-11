@@ -1,7 +1,8 @@
 import React, {useRef} from "react"
 import { useRouter } from "next/router"
 import {axiosInstance} from "../axios"
-import useErrorHandler from "../hooks/useErrorHandler";
+import useErrorHandler from "../hooks/useErrorHandler"
+import {Account} from "../../types"
 
 const AddAccount = () => {
 	const router = useRouter()
@@ -12,13 +13,14 @@ const AddAccount = () => {
 	const fakturowniaName = useRef<HTMLInputElement>()
 	const handleRegister = async () => {
 		if(allegroClientId.current.value && allegroClientSecret.current.value && fakturowniaToken.current.value){
-			const {data: responseData} = await axiosInstance.post("/account", {
+			const data: Account = {
 				name: name.current.value,
 				allegroClientId: allegroClientId.current.value,
 				allegroClientSecret: allegroClientSecret.current.value,
 				fakturowniaName: fakturowniaName.current.value,
 				fakturowniaToken: fakturowniaToken.current.value
-			})
+			}
+			const {data: responseData} = await axiosInstance.post("/account", data)
 			useErrorHandler(responseData, async () => {
 				name.current.value = ""
 				allegroClientId.current.value = ""
