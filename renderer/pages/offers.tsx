@@ -63,6 +63,8 @@ const Offers = () => {
 		)
 	}
 
+	console.log(data, data.length)
+
 	return (
 		<>
 			<h1 className={"text-3xl text-white mb-3"}>Zamówienia allegro</h1>
@@ -86,7 +88,6 @@ const Offers = () => {
 					<tbody className="divide-y divide-gray-100 border-t border-gray-100">
 						{data.length > 0 && data.map(item =>
 							<tr className="hover:bg-gray-50" key={item.id}>
-
 								<td className="px-6 py-4">
 									{!(invoices && invoices.find(i => i.id === item.id)) &&
 											<div className="flex justify-center gap-4">
@@ -105,10 +106,12 @@ const Offers = () => {
 
 								</th>
 
-								{item.invoice && 	<td className="px-6 py-4">
+								{item.invoice && <td className="px-6 py-4">
 									{"firstName" in item.invoice
 										? item.invoice.firstName + " " + item.invoice.lastName
-										: item.invoice.company.name + " " + item.invoice.company.taxId}
+										: "company" in item.invoice && item.invoice.company !== null ?
+											item.invoice.company.name + " " + item.invoice.company.taxId
+											: item.invoice.naturalPerson.firstname + " " + item.invoice.naturalPerson.lastName}
 									<br/>
 									{item.invoice && item.invoice.street} <br/>
 									{item.invoice.zipCode} {item.invoice.city} {item.invoice.countryCode}
