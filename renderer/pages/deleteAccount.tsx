@@ -3,9 +3,10 @@ import AccountSelect from "./components/accountSelect"
 import {axiosInstance} from "../axios"
 import {useRouter} from "next/router"
 import useErrorHandler from "../hooks/useErrorHandler"
+import {Account} from "../../types"
 
 const DeleteAccount = () => {
-	const [account, setAccount] = useState("")
+	const [account, setAccount] = useState<Account>(null)
 	const router = useRouter()
 	const handleAccountDelete = async () => {
 		const {data: responseData} = await axiosInstance.delete("/account", {params: {account: account}})

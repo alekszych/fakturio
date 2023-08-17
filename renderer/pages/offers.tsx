@@ -4,15 +4,17 @@ import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
 import {axiosInstance} from "../axios"
 import useErrorHandler from "../hooks/useErrorHandler"
+import {Invoice, Offer} from "../../types"
 
 const Offers = () => {
 	const {token} = useContext(AuthContext)
 	const router = useRouter()
-	const [data, setData] = useState([])
+	const [data, setData] = useState<Offer[]>([])
 	const [page, setPage] = useState(0)
-	const [checked, setChecked] = useState([])
-	const [invoices, setInvoices] = useState([])
-	const [offers, setOffers] = useState([])
+	const [checked, setChecked] = useState<Offer[]>([])
+	const [invoices, setInvoices] = useState<Invoice[]>([])
+	const [offers, setOffers] = useState<Offer[]>([])
+
 	const getOffers = async () => {
 		const {data: responseData} = await axiosInstance.get("/allegro/offer", {params: {token: token}})
 		useErrorHandler(responseData, async () => {
@@ -63,8 +65,6 @@ const Offers = () => {
 		)
 	}
 
-	console.log(data, data.length)
-
 	return (
 		<>
 			<h1 className={"text-3xl text-white mb-3"}>Zamówienia allegro</h1>
@@ -111,7 +111,7 @@ const Offers = () => {
 										? item.invoice.firstName + " " + item.invoice.lastName
 										: "company" in item.invoice && item.invoice.company !== null ?
 											item.invoice.company.name + " " + item.invoice.company.taxId
-											: item.invoice.naturalPerson.firstname + " " + item.invoice.naturalPerson.lastName}
+											: item.invoice.naturalPerson.firstName + " " + item.invoice.naturalPerson.lastName}
 									<br/>
 									{item.invoice && item.invoice.street} <br/>
 									{item.invoice.zipCode} {item.invoice.city} {item.invoice.countryCode}

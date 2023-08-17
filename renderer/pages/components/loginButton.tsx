@@ -1,11 +1,11 @@
-import React, {useContext, useState} from "react"
+import React, {FC, useContext, useState} from "react"
 import {shell} from "electron"
 import {AuthContext} from "../_app"
 import { useRouter } from "next/router"
 import {axiosInstance} from "../../axios"
 import useErrorHandler from "../../hooks/useErrorHandler"
 
-const LoginButton = () => {
+const LoginButton: FC = () => {
 	const router = useRouter()
 	const {setToken, account} = useContext(AuthContext)
 	const [buttonClicked, setButtonClicked] = useState(false)

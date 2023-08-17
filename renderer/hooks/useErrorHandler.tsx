@@ -1,7 +1,7 @@
 "use client"
 import React from "react"
 
-const useErrorHandler = (responseData: {error: string, errorMessage: string} | { any: any }, success: () => Promise<void> = async () => {}) => {
+const useErrorHandler = (responseData: {error: string, errorMessage: string} | any, success: () => Promise<void> = async () => {}) => {
 	if("error" in responseData){
 		console.log(responseData.error)
 		alert(responseData.errorMessage)

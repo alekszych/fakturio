@@ -1,18 +1,23 @@
-import React, {useEffect, useState} from "react"
-import { Listbox } from "@headlessui/react"
-import { ChevronUpDownIcon } from "@heroicons/react/20/solid"
-import { axiosInstance } from "../../axios"
+import React, {FC, SetStateAction, useEffect, useState} from "react"
+import {Listbox} from "@headlessui/react"
+import {ChevronUpDownIcon} from "@heroicons/react/20/solid"
+import {axiosInstance} from "../../axios"
 import useErrorHandler from "../../hooks/useErrorHandler"
+import {Account} from "../../../types"
 
-const classNames = (...classes) => {
+const classNames: Function = (...classes: String[]) => {
 	return classes.filter(Boolean).join(" ")
 }
-const AccountSelect = ({account, setAccount}) => {
-	const [accounts, setAccounts] = useState([])
+const AccountSelect: FC<{account: Account, setAccount: React.Dispatch<SetStateAction<Account>>}> = ({account, setAccount}) => {
+	const [accounts, setAccounts] = useState<Account[]>([])
 	useEffect(() => {
 		(async function() {
-			const {data: responseData} = await axiosInstance.get("/account")
-			useErrorHandler(responseData, async () => setAccounts(responseData))
+			const {data: responseData}: {data: {error: string, errorMessage: string} | Account[]} = await axiosInstance.get("/account")
+			useErrorHandler(responseData, async () => {
+				if(Array.isArray(responseData)){
+					setAccounts(responseData)
+				}
+			})
 		})()
 	}, [])
 

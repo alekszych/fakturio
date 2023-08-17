@@ -574,3 +574,4 @@ next-env.d.ts
 ##
 .vscode
 .idea
+package-lock.json

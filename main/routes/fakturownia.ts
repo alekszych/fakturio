@@ -1,12 +1,12 @@
 import {Request, Response, Router} from "express"
 import axios from "axios"
 import {knex} from "../api"
-import {AccountData} from "../../types"
+import {AccountData, Offer} from "../../types"
 import {Account} from "../../types"
 
 const fakturowniaRouter = Router()
 
-fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: [any], account: Account}, {}>, res: Response) => {
+fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Offer[], account: Account}, {}>, res: Response) => {
 	try {
 		const {data, account} = req.body
 		const accountData = await knex.where("accountId", account.id).select().table("accountData")
@@ -62,10 +62,13 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: [any], acc
 				"currency": currency,
 				"place": sellerCity
 			}
+
 			if (buyerFirstname) {
 				invoice["buyer_first_name"] = buyerFirstname
 				invoice["buyer_last_name"] = buyerLastname
-			} else if (buyerCompany) {
+			}
+
+			if (buyerCompany) {
 				invoice["buyer_name"] = buyerCompany.name
 				invoice["buyer_tax_no"] = buyerCompany.taxId
 			}

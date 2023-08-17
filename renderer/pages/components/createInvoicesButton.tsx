@@ -1,9 +1,10 @@
-import React, {useContext, useState} from "react"
+import React, {FC, useContext, useState} from "react"
 import {AuthContext} from "../_app"
 import {axiosInstance} from "../../axios"
 import useErrorHandler from "../../hooks/useErrorHandler"
+import {Invoice, Offer} from "../../../types"
 
-const CreateInvoicesButton = ({setInvoices, checked, setChecked}) => {
+const CreateInvoicesButton: FC<{setInvoices: (value: (invoices) => Invoice[]) => void, checked: Offer[], setChecked: (value: Offer[]) => void}> = ({setInvoices, checked, setChecked}) => {
 	const {account} = useContext(AuthContext)
 	const [hideCreateInvoices, setHideCreateInvoices] = useState(false)
 	const handleCreateInvoices = async () => {

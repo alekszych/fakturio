@@ -1,10 +1,10 @@
-import React, {useRef} from "react"
+import React, {FC, useRef} from "react"
 import { useRouter } from "next/router"
 import {axiosInstance} from "../axios"
 import useErrorHandler from "../hooks/useErrorHandler"
 import {Account} from "../../types"
 
-const AddAccount = () => {
+const AddAccount: FC = () => {
 	const router = useRouter()
 	const name = useRef<HTMLInputElement>()
 	const allegroClientId = useRef<HTMLInputElement>()
