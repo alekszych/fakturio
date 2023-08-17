@@ -1,11 +1,12 @@
-import {Router} from "express"
+import {Request, Response, Router} from "express"
 import axios from "axios"
 import {knex} from "../api"
 import {AccountData} from "../../types"
+import {Account} from "../../types"
 
 const fakturowniaRouter = Router()
 
-fakturowniaRouter.post("/invoice", async (req, res) => {
+fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: [any], account: Account}, {}>, res: Response) => {
 	try {
 		const {data, account} = req.body
 		const accountData = await knex.where("accountId", account.id).select().table("accountData")

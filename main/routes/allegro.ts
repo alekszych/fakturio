@@ -1,11 +1,12 @@
-import {Router} from "express"
+import {Request, Response, Router} from "express"
 import axios from "axios"
 import base64 from "base-64"
 import {knex} from "../api"
+import {Account} from "../../types"
 
 const allegroRouter = Router()
 
-allegroRouter.get("/token", async (req, res) => {
+allegroRouter.get("/token", async (req: Request<{}, {}, {}, {account: Account, deviceCode: string}>, res: Response) => {
 	try {
 		const {account, deviceCode} = req.query
 		const credentials = await knex.where("id", account.id).select().table("account")
@@ -30,7 +31,7 @@ allegroRouter.get("/token", async (req, res) => {
 	}
 })
 
-allegroRouter.get("/login", async (req, res) => {
+allegroRouter.get("/login", async (req: Request<{}, {}, {}, {account: Account}>, res: Response) => {
 	try {
 		const {account} = req.query
 		const accounts = await knex.where("id", account.id).select().table("account")
@@ -51,9 +52,9 @@ allegroRouter.get("/login", async (req, res) => {
 	}
 })
 
-allegroRouter.get("/offer", async (req, res) => {
+allegroRouter.get("/offer", async (req: Request, res: Response) => {
 	try {
-		const token = req.query.token
+		const {token} = req.query
 		const {data} = await axios.get("https://api.allegro.pl/order/checkout-forms", {
 			headers: {
 				"Authorization": `Bearer ${token}`,

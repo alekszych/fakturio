@@ -19,7 +19,10 @@ const Offers = () => {
 			setData([])
 			const {checkoutForms: fetchedOffers} = responseData
 			setOffers(fetchedOffers)
-			fetchedOffers.splice(page * 25, page * 25 + 25).forEach(item => {
+			fetchedOffers.filter((item, i) =>
+				(i >= page * 25) &&
+				(i < Math.min(((page + 1) * 25), (fetchedOffers.length - 1)))
+			).forEach(item => {
 				let obj = {
 					id: item.id,
 					client: item.buyer.login,
@@ -123,7 +126,7 @@ const Offers = () => {
 			</div>
 			{page > 0 && <button className={"bg-white text-black h-fit py-3 px-10 rounded m-auto my-5 mr-3"} onClick={() => setPage(page - 1)}>Poprzednia strona</button>}
 			<button className={"bg-white text-black h-fit py-3 px-5 rounded m-auto my-5 mr-3"}> {page + 1} </button>
-			{page * 25 < offers.length && <button className={"bg-white text-black h-fit py-3 px-10 rounded m-auto my-5 mr-3"} onClick={() => setPage(page + 1)}>Następna strona</button>}
+			{(page + 1) * 25 < offers.length - 1 && <button className={"bg-white text-black h-fit py-3 px-10 rounded m-auto my-5 mr-3"} onClick={() => setPage(page + 1)}>Następna strona</button>}
 		</>
 	)
 }

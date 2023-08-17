@@ -1,10 +1,10 @@
 import {Router} from "express"
 import {knex} from "../api"
 import {Account, AccountData} from "../../types"
-
+import {Request, Response} from "express"
 const accountRouter = Router()
 
-accountRouter.get("/", async (req, res) => {
+accountRouter.get("/", async (req: Request, res: Response) => {
 	try {
 		const data = await knex.select("id", "name").table("account")
 		res.status(200).json(data)
@@ -14,7 +14,7 @@ accountRouter.get("/", async (req, res) => {
 	}
 })
 
-accountRouter.post("/", async (req: { body: { allegroClientId: any; allegroClientSecret: any; fakturowniaToken: any; fakturowniaName: any; name: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { message: string; }): void; new(): any; }; }; json: (arg0: { error: any; errorMessage: string; }) => void; }) => {
+accountRouter.post("/", async (req: Request, res: Response) => {
 	try {
 		const {allegroClientId, allegroClientSecret, fakturowniaToken, fakturowniaName, name} = req.body
 		const data: Account = {
@@ -32,7 +32,7 @@ accountRouter.post("/", async (req: { body: { allegroClientId: any; allegroClien
 	}
 })
 
-accountRouter.delete("/", async (req, res) => {
+accountRouter.delete("/", async (req: Request<{}, {}, {}, {account: Account}>, res: Response) => {
 	try {
 		const {account} = req.query
 		await knex("accountData").where("accountId", account.id).del()
@@ -44,7 +44,7 @@ accountRouter.delete("/", async (req, res) => {
 	}
 })
 
-accountRouter.post("/data", async (req, res) => {
+accountRouter.post("/data", async (req: Request, res: Response) => {
 	try {
 		const {accountId, name, taxNo, street, postCode, city, country, lumpSumTax, vat, exemptTaxKind} = req.body
 		await knex("accountData").where("accountId", accountId).del()
@@ -68,7 +68,7 @@ accountRouter.post("/data", async (req, res) => {
 	}
 })
 
-accountRouter.get("/data", async (req, res) => {
+accountRouter.get("/data", async (req: Request<{}, {}, {}, {account: Account}>, res: Response) => {
 	try {
 		const {account} = req.query
 		const data = await knex.where("accountId", account.id).select().table("accountData")
