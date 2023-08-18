@@ -58,7 +58,9 @@ accountRouter.post("/data", async (req: Request, res: Response) => {
 			country: country,
 			lumpSumTax: lumpSumTax,
 			vat: vat,
-			exemptTaxKind: exemptTaxKind
+		}
+		if(vat.toLowerCase() == "zw"){
+			data.exemptTaxKind = exemptTaxKind
 		}
 		await knex("accountData").insert(data)
 		res.status(200).json({message: "Dane zostały zmienione"})

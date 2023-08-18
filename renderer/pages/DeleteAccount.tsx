@@ -4,6 +4,7 @@ import {axiosInstance} from "../axios"
 import {useRouter} from "next/router"
 import {useErrorHandler} from "../hooks/useErrorHandler"
 import {Account} from "../../types"
+import {Button} from "./components/Button"
 
 const DeleteAccount = () => {
 	const [account, setAccount] = useState<Account>(null)
@@ -20,14 +21,8 @@ const DeleteAccount = () => {
 			<h1 className={"text-white text-3xl mx-auto text-center mb-5"}>Wybierz konto do usunięcia</h1>
 			<AccountSelect account={account} setAccount={setAccount}/>
 			<div className={"flex mt-8 justify-center"}>
-				<button className={"flex bg-white text-black h-fit w-fit py-2 px-10 rounded mx-2.5"}
-				        onClick={() => router.push("/Home")}>
-					Anuluj
-				</button>
-				<button className={"flex bg-white text-black h-fit w-fit py-2 px-10 rounded mx-2.5"}
-					        onClick={handleAccountDelete}>
-						Usuń konto
-				</button>
+				<Button onClick={() => router.push("/Home")}> Anuluj </Button>
+				<Button onClick={handleAccountDelete}> Usuń konto </Button>
 			</div>
 		</div>
 	)

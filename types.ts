@@ -18,7 +18,7 @@ export interface AccountData {
 	country: string,
 	lumpSumTax: string,
 	vat: string,
-	exemptTaxKind: string
+	exemptTaxKind?: string
 }
 
 export interface InvoiceFile{
@@ -72,4 +72,10 @@ export interface SimplifiedOffer{
 export interface Error{
 	error: String,
 	errorMessage: String
+}
+
+export interface FormField{
+	clientName: string,
+	devName: string,
+	optional?: boolean
 }

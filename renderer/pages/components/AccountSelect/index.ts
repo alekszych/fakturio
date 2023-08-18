@@ -1,11 +1,11 @@
 import {AccountSelect} from "./AccountSelect"
 
-import {AccountSelectProps} from "./AccountSelect.props"
+import {AccountSelectTypes} from "./AccountSelect.types"
 
 export {
 	AccountSelect
 }
 
 export type {
-	AccountSelectProps
+	AccountSelectTypes
 }

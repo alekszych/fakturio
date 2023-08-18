@@ -1,8 +1,8 @@
 import {axiosInstance} from "../../axios"
 import {useErrorHandler} from "../useErrorHandler"
-import {GetOffersTypes} from "./getOffers.types"
+import {UseGetOffersTypes} from "./useGetOffers.types"
 
-export const getOffers = async ({setData, setOffers, page, token}: GetOffersTypes) => {
+export const useGetOffers = async ({setData, setOffers, page, token}: UseGetOffersTypes) => {
 	const {data: responseData} = await axiosInstance.get("/allegro/offer", {params: {token: token}})
 	useErrorHandler({responseData: responseData, success: async () => {
 		setData([])
