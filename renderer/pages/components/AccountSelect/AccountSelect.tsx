@@ -15,7 +15,7 @@ export const AccountSelect: FC<AccountSelectProps> = ({account, setAccount}) => 
 
 	useEffect(() => {
 		(async function() {
-			const {data: responseData}: {data: {error: string, errorMessage: string} | Account[]} = await axiosInstance.get("/account")
+			const {data: responseData}: {data: Error | Account[]} = await axiosInstance.get("/account")
 			useErrorHandler({responseData: responseData, success: async () => {
 				if(!Array.isArray(responseData))
 					return

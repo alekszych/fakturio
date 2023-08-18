@@ -2,16 +2,16 @@ import React, {useContext, useEffect, useState} from "react"
 import {CreateInvoicesButton} from "./components/CreateInvoicesButton"
 import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
-import {Invoice, Offer} from "../../types"
+import {InvoiceFile, Offer, SimplifiedOffer} from "../../types"
 import {getOffers} from "../hooks/getOffers"
 
 const Offers = () => {
 	const {token} = useContext(AuthContext)
 	const router = useRouter()
-	const [data, setData] = useState<Offer[]>([])
+	const [data, setData] = useState<SimplifiedOffer[]>([])
 	const [page, setPage] = useState(0)
 	const [checked, setChecked] = useState<Offer[]>([])
-	const [invoices, setInvoices] = useState<Invoice[]>([])
+	const [invoiceFiles, setInvoiceFiles] = useState<InvoiceFile[]>([])
 	const [offers, setOffers] = useState<Offer[]>([])
 
 	const handleCheckboxChange = (item) => {
@@ -24,8 +24,12 @@ const Offers = () => {
 	}
 
 	useEffect(() => {
-		if (token)
-			getOffers({setData: setData, setOffers: setOffers, setChecked: setChecked, page: page, token: token}).then(() => {}).then()
+		(async () => {
+			if (!token)
+				return
+			await getOffers({setData: setData, setOffers: setOffers, page: page, token: token})
+			setChecked([])
+		})()
 	}, [token, page])
 
 	if (data.length === 0) {
@@ -41,7 +45,7 @@ const Offers = () => {
 			<h1 className={"text-3xl text-white mb-3"}>Zamówienia allegro</h1>
 			<div>
 				<button className={"bg-white text-black h-fit py-3 px-5 rounded m-auto my-5 mr-3"} onClick={() => setPage(0)}> Odśwież zamówienia </button>
-				<CreateInvoicesButton setInvoices={setInvoices} checked={checked} setChecked={setChecked}/>
+				<CreateInvoicesButton setInvoiceFiles={setInvoiceFiles} checked={checked} setChecked={setChecked}/>
 				<button className={"bg-white text-black h-fit py-3 px-8 rounded m-auto my-5 mr-3"} onClick={() => router.push("/Home")}> Zmień konto </button>
 				<button className={"bg-white text-black h-fit py-3 px-8 rounded m-auto my-5 mr-3"} onClick={() => router.push("/UserData")}> Zmień dane konta </button>
 			</div>
@@ -60,7 +64,7 @@ const Offers = () => {
 						{data.length > 0 && data.map(item =>
 							<tr className="hover:bg-gray-50" key={item.id}>
 								<td className="px-6 py-4">
-									{!(invoices && invoices.find(i => i.id === item.id)) &&
+									{!(invoiceFiles && invoiceFiles.find(i => i.id === item.id)) &&
 											<div className="flex justify-center gap-4">
 												<input type={"checkbox"} onChange={() => handleCheckboxChange(item)}/>
 											</div>
@@ -89,8 +93,8 @@ const Offers = () => {
 								</td>}
 
 								<td className={"flex align-middle"}>
-									{invoices && invoices.find(i => i.id === item.id)  &&
-											<a href={invoices.find(i => i.id === item.id).file}> <button className={"px-6 py-4"}> Pobierz </button></a>
+									{invoiceFiles && invoiceFiles.find(i => i.id === item.id)  &&
+											<a href={invoiceFiles.find(i => i.id === item.id).file}> <button className={"px-6 py-4"}> Pobierz </button></a>
 									}
 								</td>
 							</tr>

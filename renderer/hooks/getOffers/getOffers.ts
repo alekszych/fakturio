@@ -2,7 +2,7 @@ import {axiosInstance} from "../../axios"
 import {useErrorHandler} from "../useErrorHandler"
 import {GetOffersTypes} from "./getOffers.types"
 
-export const getOffers = async ({setData, setOffers, setChecked, page, token}: GetOffersTypes) => {
+export const getOffers = async ({setData, setOffers, page, token}: GetOffersTypes) => {
 	const {data: responseData} = await axiosInstance.get("/allegro/offer", {params: {token: token}})
 	useErrorHandler({responseData: responseData, success: async () => {
 		setData([])
@@ -26,6 +26,5 @@ export const getOffers = async ({setData, setOffers, setChecked, page, token}: G
 				obj.invoice = item.delivery.address
 			setData(data => data.concat(obj))
 		})
-		setChecked([])
 	}})
 }

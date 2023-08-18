@@ -28,7 +28,6 @@ module.exports = {
 		indent: [2, "tab"],
 		quotes: [2, "double"],
 		"object-curly-spacing": ["error", "never"],
-		"no-trailing-spaces": "error",
 		"no-multiple-empty-lines": ["error", {"max": 2, "maxBOF": 0, "maxEOF": 1}]
 	}
 }
