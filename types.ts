@@ -55,3 +55,8 @@ export interface Offer{
 		selectedAdditionalServices: any[]
 	}[]
 }
+
+export interface Error{
+	error: String,
+	errorMessage: String
+}

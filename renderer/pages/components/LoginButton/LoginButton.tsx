@@ -1,31 +1,31 @@
 import React, {FC, useContext, useState} from "react"
 import {shell} from "electron"
-import {AuthContext} from "../_app"
-import { useRouter } from "next/router"
-import {axiosInstance} from "../../axios"
-import useErrorHandler from "../../hooks/useErrorHandler"
+import {AuthContext} from "../../_app"
+import {useRouter} from "next/router"
+import {axiosInstance} from "../../../axios"
+import {useErrorHandler} from "../../../hooks/useErrorHandler"
 
-const LoginButton: FC = () => {
+export const LoginButton: FC = () => {
 	const router = useRouter()
 	const {setToken, account} = useContext(AuthContext)
 	const [buttonClicked, setButtonClicked] = useState(false)
 	const login = async () => {
 		setButtonClicked(true)
 		const {data: loginResponseData} = await axiosInstance.get("/allegro/login", {params: {account: account}})
-		useErrorHandler(loginResponseData, async () => {
+		useErrorHandler({responseData: loginResponseData, success: async () => {
 			await shell.openExternal(loginResponseData.verification_uri_complete)
 			shell.beep()
-			const {data: getTokensResponseData} = await axiosInstance.get("/allegro/token", {
+			const {data: tokenResponseData} = await axiosInstance.get("/allegro/token", {
 				params: {
 					account: account,
 					deviceCode: loginResponseData.device_code
 				}
 			})
-			setToken(getTokensResponseData.access_token)
+			setToken(tokenResponseData.access_token)
 			if (typeof window !== "undefined") {
-				await router.push("/offers")
+				await router.push("/Offers")
 			}
-		})
+		}})
 	}
 
 	return (
@@ -36,8 +36,4 @@ const LoginButton: FC = () => {
 			</button>
 		</div>
 	)
-	
-
 }
-
-export default LoginButton

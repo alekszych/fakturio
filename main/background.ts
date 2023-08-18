@@ -8,7 +8,7 @@ const server = api()
 let mainWindow
 
 if (isProd) {
-	serve({ directory: "app" })
+	serve({directory: "app"})
 } else {
 	app.setPath("userData", `${app.getPath("userData")} (development)`)
 }
@@ -23,10 +23,10 @@ if (isProd) {
 	})
 
 	if (isProd) {
-		await mainWindow.loadURL("app://./home.html")
+		await mainWindow.loadURL("app://./Home.html")
 	} else {
 		const port = process.argv[2]
-		await mainWindow.loadURL(`http://localhost:${port}/home`)
+		await mainWindow.loadURL(`http://localhost:${port}/Home`)
 		mainWindow.webContents.openDevTools()
 	}
 })()
@@ -38,5 +38,4 @@ app.on("before-quit", () => {
 app.on("window-all-closed", () => {
 	app.quit()
 })
-
 

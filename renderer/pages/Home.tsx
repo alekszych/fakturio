@@ -1,8 +1,8 @@
 import React, {useContext, useEffect} from "react"
-import LoginButton from "./components/loginButton"
-import AccountSelect from "./components/accountSelect"
+import {AccountSelect} from "./components/AccountSelect"
 import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
+import {LoginButton} from "./components/LoginButton"
 
 const Home = () => {
 	const router = useRouter()
@@ -17,11 +17,11 @@ const Home = () => {
 			<AccountSelect account={account} setAccount={setAccount}/>
 			<div className={"flex mt-8 justify-center"}>
 				<button className={"flex bg-white text-black h-fit w-fit py-2 px-10 rounded mx-2.5"}
-					onClick={() => router.push("/addAccount")}>
+					onClick={() => router.push("/AddAccount")}>
 							Dodaj nowe konto
 				</button>
 				<button className={"flex bg-white text-black h-fit w-fit py-2 px-10 rounded mx-2.5"}
-				        onClick={() => router.push("/deleteAccount")}>
+				        onClick={() => router.push("/DeleteAccount")}>
 					Usuń konto
 				</button>
 				{account && <LoginButton/>}

@@ -1,7 +1,7 @@
 import React, {FC, useRef} from "react"
-import { useRouter } from "next/router"
+import {useRouter} from "next/router"
 import {axiosInstance} from "../axios"
-import useErrorHandler from "../hooks/useErrorHandler"
+import {useErrorHandler} from "../hooks/useErrorHandler"
 import {Account} from "../../types"
 
 const AddAccount: FC = () => {
@@ -21,16 +21,16 @@ const AddAccount: FC = () => {
 				fakturowniaToken: fakturowniaToken.current.value
 			}
 			const {data: responseData} = await axiosInstance.post("/account", data)
-			useErrorHandler(responseData, async () => {
+			useErrorHandler({responseData: responseData, success: async () => {
 				name.current.value = ""
 				allegroClientId.current.value = ""
 				allegroClientSecret.current.value = ""
 				fakturowniaName.current.value = ""
 				fakturowniaToken.current.value = ""
 				if (typeof window !== "undefined") {
-					await router.push("/home")
+					await router.push("/Home")
 				}
-			})
+			}})
 		} else {
 			alert("Wprowadź wszystkie dane")
 		}
@@ -66,7 +66,7 @@ const AddAccount: FC = () => {
 
 			<div className={"flex justify-center"}>
 				<button className={"bg-white text-black h-fit w-fit py-2 px-20 rounded mt-5 max-w-full mr-10"}
-				        onClick={() => router.push("/home")}>
+				        onClick={() => router.push("/Home")}>
 					Anuluj
 				</button>
 				<button className={"bg-white text-black h-fit w-fit py-2 px-20 rounded mt-5 max-w-full"}

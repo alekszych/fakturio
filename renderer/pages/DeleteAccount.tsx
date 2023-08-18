@@ -1,8 +1,8 @@
 import React, {useState} from "react"
-import AccountSelect from "./components/accountSelect"
+import {AccountSelect} from "./components/AccountSelect"
 import {axiosInstance} from "../axios"
 import {useRouter} from "next/router"
-import useErrorHandler from "../hooks/useErrorHandler"
+import {useErrorHandler} from "../hooks/useErrorHandler"
 import {Account} from "../../types"
 
 const DeleteAccount = () => {
@@ -10,10 +10,10 @@ const DeleteAccount = () => {
 	const router = useRouter()
 	const handleAccountDelete = async () => {
 		const {data: responseData} = await axiosInstance.delete("/account", {params: {account: account}})
-		useErrorHandler(responseData, async () => {
-			await router.push("/home")
+		useErrorHandler({responseData: responseData, success: async () => {
+			await router.push("/Home")
 			alert("Konto zostało usunięte")
-		})
+		}})
 	}
 	return (
 		<div className={"absolute left-0 right-0 top-0 bottom-0 m-auto h-fit w-4/5 max-w-2xl p-5 pb-10"}>
@@ -21,7 +21,7 @@ const DeleteAccount = () => {
 			<AccountSelect account={account} setAccount={setAccount}/>
 			<div className={"flex mt-8 justify-center"}>
 				<button className={"flex bg-white text-black h-fit w-fit py-2 px-10 rounded mx-2.5"}
-				        onClick={() => router.push("/home")}>
+				        onClick={() => router.push("/Home")}>
 					Anuluj
 				</button>
 				<button className={"flex bg-white text-black h-fit w-fit py-2 px-10 rounded mx-2.5"}

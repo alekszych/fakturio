@@ -1,10 +1,9 @@
 import React, {useContext, useEffect, useState} from "react"
-import CreateInvoicesButton from "./components/createInvoicesButton"
+import {CreateInvoicesButton} from "./components/CreateInvoicesButton"
 import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
-import {axiosInstance} from "../axios"
-import useErrorHandler from "../hooks/useErrorHandler"
 import {Invoice, Offer} from "../../types"
+import {getOffers} from "../hooks/getOffers"
 
 const Offers = () => {
 	const {token} = useContext(AuthContext)
@@ -14,34 +13,6 @@ const Offers = () => {
 	const [checked, setChecked] = useState<Offer[]>([])
 	const [invoices, setInvoices] = useState<Invoice[]>([])
 	const [offers, setOffers] = useState<Offer[]>([])
-
-	const getOffers = async () => {
-		const {data: responseData} = await axiosInstance.get("/allegro/offer", {params: {token: token}})
-		useErrorHandler(responseData, async () => {
-			setData([])
-			const {checkoutForms: fetchedOffers} = responseData
-			setOffers(fetchedOffers)
-			fetchedOffers.filter((item, i) =>
-				(i >= page * 25) &&
-				(i < Math.min(((page + 1) * 25), (fetchedOffers.length - 1)))
-			).forEach(item => {
-				let obj = {
-					id: item.id,
-					client: item.buyer.login,
-					products: item.lineItems,
-					deliveryCost: item.delivery.cost.amount,
-					currency: item.summary.totalToPay.currency,
-					invoice: null
-				}
-				if (item.invoice.required === true)
-					obj.invoice = item.invoice.address
-				else
-					obj.invoice = item.delivery.address
-				setData(data => data.concat(obj))
-			})
-			setChecked([])
-		})
-	}
 
 	const handleCheckboxChange = (item) => {
 		const foundItem = checked.find(e => e.id === item.id)
@@ -54,7 +25,7 @@ const Offers = () => {
 
 	useEffect(() => {
 		if (token)
-			getOffers().then(() => {})
+			getOffers({setData: setData, setOffers: setOffers, setChecked: setChecked, page: page, token: token}).then(() => {}).then()
 	}, [token, page])
 
 	if (data.length === 0) {
@@ -69,10 +40,10 @@ const Offers = () => {
 		<>
 			<h1 className={"text-3xl text-white mb-3"}>Zamówienia allegro</h1>
 			<div>
-				<button className={"bg-white text-black h-fit py-3 px-5 rounded m-auto my-5 mr-3"} onClick={getOffers}> Odśwież zamówienia </button>
+				<button className={"bg-white text-black h-fit py-3 px-5 rounded m-auto my-5 mr-3"} onClick={() => setPage(0)}> Odśwież zamówienia </button>
 				<CreateInvoicesButton setInvoices={setInvoices} checked={checked} setChecked={setChecked}/>
-				<button className={"bg-white text-black h-fit py-3 px-8 rounded m-auto my-5 mr-3"} onClick={() => router.push("/home")}> Zmień konto </button>
-				<button className={"bg-white text-black h-fit py-3 px-8 rounded m-auto my-5 mr-3"} onClick={() => router.push("/userData")}> Zmień dane konta </button>
+				<button className={"bg-white text-black h-fit py-3 px-8 rounded m-auto my-5 mr-3"} onClick={() => router.push("/Home")}> Zmień konto </button>
+				<button className={"bg-white text-black h-fit py-3 px-8 rounded m-auto my-5 mr-3"} onClick={() => router.push("/UserData")}> Zmień dane konta </button>
 			</div>
 			<div className="overflow-hidden rounded-lg border border-gray-200 shadow-md">
 				<table className="w-full border-collapse bg-white text-left text-sm text-gray-500">

@@ -2,7 +2,7 @@ import React, {createContext, useState} from "react"
 import "../styles/globals.css"
 export const AuthContext = createContext(null)
 
-function MyApp({ Component, pageProps }) {
+function MyApp({Component, pageProps}) {
 	const [token, setToken] = useState("")
 	const [account, setAccount] = useState("")
 	return (

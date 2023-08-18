@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef, useState} from "react"
 import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
 import {axiosInstance} from "../axios"
-import useErrorHandler from "../hooks/useErrorHandler"
+import {useErrorHandler} from "../hooks/useErrorHandler"
 import {AccountData} from "../../types"
 
 const UserData = () => {
@@ -22,7 +22,7 @@ const UserData = () => {
 	useEffect(() => {
 		(async function() {
 			const {data: responseData} = await axiosInstance.get("/account/data", {params: {account: account}})
-			useErrorHandler(responseData, async () => setUserData(responseData[0]))
+			useErrorHandler({responseData: responseData, success: async () => setUserData(responseData[0])})
 		})()
 	}, [])
 
@@ -56,10 +56,10 @@ const UserData = () => {
 			exemptTaxKind: exemptTaxKind.current.value
 		}
 		const {data: responseData} = await axiosInstance.post("/account/data", data)
-		useErrorHandler(responseData, async ()  =>  {
+		useErrorHandler({responseData: responseData, success: async ()  =>  {
 			alert("Dane konta zostały zmienione")
-			await router.push("/offers")
-		})
+			await router.push("/Offers")
+		}})
 	}
 
 	return (
@@ -113,7 +113,7 @@ const UserData = () => {
 
 			<div className={"flex justify-center"}>
 				<button className={"bg-white text-black h-fit w-fit py-2 px-20 rounded mt-5 max-w-full mr-10"}
-					        onClick={() => router.push("/offers")}>
+					        onClick={() => router.push("/Offers")}>
 						Anuluj
 				</button>
 				<button className={"bg-white text-black h-fit w-fit py-2 px-20 rounded mt-5 max-w-full"}

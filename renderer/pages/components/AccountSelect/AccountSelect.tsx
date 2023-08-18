@@ -1,30 +1,33 @@
-import React, {FC, SetStateAction, useEffect, useState} from "react"
+import React, {FC, useEffect, useState} from "react"
 import {Listbox} from "@headlessui/react"
 import {ChevronUpDownIcon} from "@heroicons/react/20/solid"
-import {axiosInstance} from "../../axios"
-import useErrorHandler from "../../hooks/useErrorHandler"
-import {Account} from "../../../types"
+import {axiosInstance} from "../../../axios"
+import {useErrorHandler} from "../../../hooks/useErrorHandler"
+import {Account} from "../../../../types"
+import {AccountSelectProps} from "./AccountSelect.props"
 
 const classNames: Function = (...classes: String[]) => {
 	return classes.filter(Boolean).join(" ")
 }
-const AccountSelect: FC<{account: Account, setAccount: React.Dispatch<SetStateAction<Account>>}> = ({account, setAccount}) => {
+
+export const AccountSelect: FC<AccountSelectProps> = ({account, setAccount}) => {
 	const [accounts, setAccounts] = useState<Account[]>([])
+
 	useEffect(() => {
 		(async function() {
 			const {data: responseData}: {data: {error: string, errorMessage: string} | Account[]} = await axiosInstance.get("/account")
-			useErrorHandler(responseData, async () => {
-				if(Array.isArray(responseData)){
-					setAccounts(responseData)
-				}
-			})
+			useErrorHandler({responseData: responseData, success: async () => {
+				if(!Array.isArray(responseData))
+					return
+				setAccounts(responseData)
+			}})
 		})()
 	}, [])
 
 	if(accounts && accounts.length === 0){
 		return <p className={"text-white text-xl m-auto flex w-fit"}> Nie dodałeś/aś jeszcze żadnego konta </p>
 	}
-	
+
 	if (accounts){
 		return (
 			<div className={"m-auto w-4/5"}>
@@ -44,7 +47,7 @@ const AccountSelect: FC<{account: Account, setAccount: React.Dispatch<SetStateAc
 							{accounts.map((account) => (
 								<Listbox.Option
 									key={account.id}
-									className={({ active }) =>
+									className={({active}) =>
 										classNames(
 											active ? "bg-indigo-600 text-blue-400" : "text-gray-900",
 											"relative cursor-default select-none py-2 pl-3 pr-9"
@@ -52,7 +55,7 @@ const AccountSelect: FC<{account: Account, setAccount: React.Dispatch<SetStateAc
 									}
 									value={account}
 								>
-									{({ selected }) => (
+									{({selected}) => (
 										<div className="flex items-center">
 											<span className={classNames(selected ? "font-semibold" : "font-normal", "ml-3 truncate flex")}>
 												<p className={"mr-3"}> {account.name} </p>
@@ -68,5 +71,3 @@ const AccountSelect: FC<{account: Account, setAccount: React.Dispatch<SetStateAc
 		)
 	}
 }
-
-export default AccountSelect
