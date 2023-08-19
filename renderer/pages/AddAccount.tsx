@@ -12,7 +12,7 @@ const AddAccount: FC = () => {
 	const fields: FormField[] = [
 		{clientName: "Nazwa", devName: "name"},
 		{clientName: "ClientID - Allegro", devName: "allegroClientId"},
-		{clientName: "ClientSecret - Allegro", devName: "allegroClientSecret"},
+		{clientName: "ClientSecret - Allegro", devName: "allegroClientSecret", size: "large"},
 		{clientName: "Nazwa użytkownika - Fakturownia", devName: "fakturowniaName"},
 		{clientName: "Token API - Fakturownia", devName: "fakturowniaToken"},
 	]
@@ -40,7 +40,6 @@ const AddAccount: FC = () => {
 			title={"Dodaj konto"}
 			fields={fields}
 			onSubmit={handleAddAccount}
-			previousPage={"/Home"}
 		/>
 	)
 }

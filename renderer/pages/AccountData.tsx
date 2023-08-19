@@ -20,15 +20,15 @@ const AccountData = () => {
 	}, [])
 
 	const fields: FormField[] = [
-		{clientName: "Nazwa firmy", devName: "name"},
+		{clientName: "Nazwa firmy", devName: "name", size: "large"},
 		{clientName: "NIP", devName: "taxNo"},
 		{clientName: "Adres", devName: "street"},
 		{clientName: "Kod pocztowy", devName: "postCode"},
 		{clientName: "Miasto", devName: "city"},
 		{clientName: "Państwo", devName: "country"},
-		{clientName: "Stawka ryczałtu (2, 3, 5.5, 8.5, 10, 12, 12.5, 14, 15, 17)", devName: "lumpSumTax"},
-		{clientName: "Stawka VAT (zw, np, 0, 5, 7, 8, 23)", devName: "vat"},
-		{clientName: "Podstawa zwolnienia z vat (Jeśli firma jest z zwolniona z podatku VAT)", devName: "exemptTaxKind", optional: true},
+		{clientName: "Stawka ryczałtu", devName: "lumpSumTax", options: ["2", "3", "5.5", "8.5", "10", "12", "12.5", "14", "15", "17"]},
+		{clientName: "Stawka VAT", devName: "vat", options: ["zw", "np", "0", "5", "7", "8", "23"]},
+		{clientName: "Podstawa zwolnienia z vat - wpisz jeśłi firma jest z zwolniona z podatku VAT", devName: "exemptTaxKind", optional: true, size: "large"},
 	]
 
 	const handleSetUserData = async (event, accountData) => {
@@ -37,14 +37,6 @@ const AccountData = () => {
 			data: accountData,
 			fields: fields,
 			success: async () => {
-				if(accountData.taxNo.length !== 10 ||
-					!(["2", "3", "5.5", "8.5", "10", "12", "12.5", "14", "15", "17"].includes(accountData.lumpSumTax)) ||
-					!(["zw", "np", "0", "5", "7", "8", "23"].includes(accountData.vat))
-				){
-					alert("Wpisz poprawne wartości do formularza")
-					return
-				}
-				console.log(accountData)
 				const data: AccountData = {
 					...accountData,
 					accountId: account.id,
@@ -63,7 +55,6 @@ const AccountData = () => {
 		      fields={fields}
 		      defaultValues={prevAccountData}
 		      onSubmit={handleSetUserData}
-		      previousPage={"/Home"}
 		/>
 	)
 }

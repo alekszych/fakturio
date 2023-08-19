@@ -10,7 +10,7 @@ function MyApp({Component, pageProps}) {
 			token: token, setToken: setToken,
 			account: account, setAccount: setAccount
 		}}>
-			<main className={"flex-col items-center min-h-screen min-w-full bg-white p-10"}>
+			<main className={"flex-col items-center min-h-screen min-w-full bg-white p-10 relative overflow-auto"}>
 				<Component {...pageProps} />
 			</main>
 		</AuthContext.Provider>

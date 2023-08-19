@@ -40,7 +40,7 @@ const Offers = () => {
 	return (
 		<>
 			<OffersHeader handleCreateInvoices={handleCreateInvoices}/>
-			<div className="overflow-hidden rounded-lg border border-gray-200 shadow-md">
+			<div className="rounded-lg border border-gray-200 shadow-md overflow-auto min-w-[800px] mr-4">
 				<OfferTable invoiceFiles={invoiceFiles} checked={checked} setChecked={setChecked} data={data}/>
 			</div>
 			<OffersFooter page={page} setPage={setPage} offers={offers}/>

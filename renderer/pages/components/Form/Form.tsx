@@ -3,12 +3,14 @@ import {useOnInputChange} from "../../../hooks/useOnInputChange"
 import {FormTypes} from "./Form.types"
 import {useRouter} from "next/router"
 import {Button} from "../Button"
+import {Select} from "../Select"
+import {Input} from "../Input"
 
 export const Form: FC<FormTypes> = ({title, fields, defaultValues, onSubmit}) => {
 	const router = useRouter()
-	const [formData, setFormData] = useState<Object>()
-	const handleInputChange = e => {
-		useOnInputChange({setState: setFormData, event: e})
+	const [formData, setFormData] = useState<Object>({})
+	const handleInputChange = event => {
+		useOnInputChange({setState: setFormData, event: event})
 	}
 
 	useEffect(() => {
@@ -19,21 +21,26 @@ export const Form: FC<FormTypes> = ({title, fields, defaultValues, onSubmit}) =>
 		})
 	}, [defaultValues])
 
-
 	return (
-		<form className={"flex flex-col h-fit pb-5"}>
-			<h1 className={"text-3xl mb-5 text-blue-800"}>{title}</h1>
+		<form className={"flex flex-col pl-[20px] pr-[28.75px] h-fit min-h-fit pb-5 max-w-full w-[730px] absolute left-0 right-0 top-0 bottom-0 mx-auto my-20"}>
+			<h1 className={"text-3xl mb-5 text-blue-800 mx-[8.75px]"}>{title}</h1>
 
-			{fields.map(field =>
-				<label className={"mb-4"} key={field.devName}>
-					<p className={"mb-1.5"}> {field.clientName} </p>
-					<input className={"bg-[#eff1fa] w-full h-fit rounded-xl px-4 py-2 focus:outline-blue-300"} name={field.devName} onChange={handleInputChange} defaultValue={defaultValues && field.devName in defaultValues && defaultValues[field.devName]}/>
-				</label>
-			)}
+			<div className={"flex flex-wrap max-w-full"}>
+				{fields.map(field =>
+					<label className={"mb-4 mx-[8.75px] max-w-full"} key={field.devName}>
+						<p className={"mb-1.5"}> {field.clientName} </p>
+						{"options" in field ?
+							<Select formData={formData} field={field} onChange={handleInputChange}/>
+							:
+							<Input field={field} onChange={handleInputChange} defaultValues={defaultValues}/>
+						}
+					</label>
+				)}
+			</div>
 
-			<div className={"flex justify-end"}>
-				<Button onClick={() => router.back()} variant={"outline"}> Anuluj </Button>
-				<Button onClick={(e) => onSubmit(e, formData)}> Zatwierdź </Button>
+			<div className={"flex justify-end flex-wrap"}>
+				<Button className={"mx-2 mb-4"} onClick={() => router.push("/Home")} variant={"outline"}> Anuluj </Button>
+				<Button className={"mx-2"} onClick={(e) => onSubmit(e, formData)}> Zatwierdź </Button>
 			</div>
 
 		</form>

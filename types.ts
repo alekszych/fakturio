@@ -78,4 +78,6 @@ export interface FormField{
 	clientName: string,
 	devName: string,
 	optional?: boolean
+	size?: "normal" | "large"
+	options?: string[]
 }
