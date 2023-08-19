@@ -1,6 +1,6 @@
 import {Router} from "express"
 import {knex} from "../api"
-import {Account, AccountData} from "../../types"
+import {Account, AccountData} from "../../global-types"
 import {Request, Response} from "express"
 const accountRouter = Router()
 

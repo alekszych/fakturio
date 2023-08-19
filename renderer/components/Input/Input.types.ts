@@ -1,4 +1,4 @@
-import {FormField} from "../../../../types"
+import {FormField} from "../../../global-types"
 
 export interface InputTypes{
 	field: FormField

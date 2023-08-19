@@ -1,5 +1,5 @@
-import {Account} from "../../../../types"
 import React, {SetStateAction} from "react"
+import {Account} from "../../../global-types"
 
 export interface AccountSelectTypes {
 	account: Account,

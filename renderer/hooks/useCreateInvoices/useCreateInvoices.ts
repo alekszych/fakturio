@@ -1,4 +1,4 @@
-import {Error, InvoiceFile} from "../../../types"
+import {Error, InvoiceFile} from "../../../global-types"
 import {axiosInstance} from "../../axios"
 import {useErrorHandler} from "../useErrorHandler"
 import {UseCreateInvoicesTypes} from "./useCreateInvoices.types"

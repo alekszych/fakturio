@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from "react"
 import {AuthContext} from "./_app"
-import {InvoiceFile, Offer, SimplifiedOffer} from "../../types"
+import {InvoiceFile, Offer, SimplifiedOffer} from "../../global-types"
 import {useGetOffers} from "../hooks/useGetOffers"
-import {OfferTable} from "./components/OfferTable"
 import {useCreateInvoices} from "../hooks/useCreateInvoices"
-import {OffersHeader} from "./components/OffersHeader"
-import {OffersFooter} from "./components/OffersFooter"
+import {OfferTable} from "../components/OfferTable"
+import {OffersHeader} from "../components/OffersHeader"
+import {OffersFooter} from "../components/OffersFooter"
 
 const Offers = () => {
 	const {token, account} = useContext(AuthContext)

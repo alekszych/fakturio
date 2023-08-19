@@ -1,4 +1,4 @@
-import {FormField} from "../../../../types"
+import {FormField} from "../../../global-types"
 import {FormEvent} from "react"
 
 export interface FormTypes{

@@ -2,9 +2,9 @@ import React, {FC} from "react"
 import {useRouter} from "next/router"
 import {axiosInstance} from "../axios"
 import {useErrorHandler} from "../hooks/useErrorHandler"
-import {FormField} from "../../types"
+import {FormField} from "../../global-types"
 import useHandleFormSubmit from "../hooks/useHandleFormSubmit/useHandleFormSubmit"
-import {Form} from "./components/Form"
+import {Form} from "../components/Form"
 
 const AddAccount: FC = () => {
 	const router = useRouter()

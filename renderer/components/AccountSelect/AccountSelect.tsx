@@ -1,10 +1,10 @@
 import React, {FC, useEffect, useState} from "react"
 import {Listbox} from "@headlessui/react"
-import {axiosInstance} from "../../../axios"
-import {useErrorHandler} from "../../../hooks/useErrorHandler"
-import {Account} from "../../../../types"
 import {AccountSelectTypes} from "./AccountSelect.types"
 import {HiChevronUpDown} from "react-icons/hi2"
+import {Account} from "../../../global-types"
+import {axiosInstance} from "../../axios"
+import {useErrorHandler} from "../../hooks/useErrorHandler"
 
 export const AccountSelect: FC<AccountSelectTypes> = ({account, setAccount}) => {
 	const [accounts, setAccounts] = useState<Account[]>([])

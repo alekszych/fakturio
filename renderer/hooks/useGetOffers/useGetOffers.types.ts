@@ -1,5 +1,5 @@
 import React, {SetStateAction} from "react"
-import {Offer} from "../../../types"
+import {Offer} from "../../../global-types"
 
 export interface UseGetOffersTypes {
 	setData: React.Dispatch<SetStateAction<Offer[]>>,

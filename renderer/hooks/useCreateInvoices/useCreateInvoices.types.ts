@@ -1,4 +1,4 @@
-import {Account, Offer} from "../../../types"
+import {Account, Offer} from "../../../global-types"
 
 export interface UseCreateInvoicesTypes{
 	checked: Offer[],

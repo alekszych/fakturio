@@ -3,8 +3,8 @@ import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
 import {axiosInstance} from "../axios"
 import {useErrorHandler} from "../hooks/useErrorHandler"
-import {AccountData, FormField} from "../../types"
-import {Form} from "./components/Form"
+import {AccountData, FormField} from "../../global-types"
+import {Form} from "../components/Form"
 import useHandleFormSubmit from "../hooks/useHandleFormSubmit/useHandleFormSubmit"
 
 const AccountData = () => {

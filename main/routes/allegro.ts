@@ -2,7 +2,7 @@ import {Request, Response, Router} from "express"
 import axios from "axios"
 import base64 from "base-64"
 import {knex} from "../api"
-import {Account} from "../../types"
+import {Account} from "../../global-types"
 
 const allegroRouter = Router()
 

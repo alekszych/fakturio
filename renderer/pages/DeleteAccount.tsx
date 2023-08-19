@@ -1,10 +1,10 @@
 import React, {useState} from "react"
-import {AccountSelect} from "./components/AccountSelect"
+import {AccountSelect} from "../components/AccountSelect"
 import {axiosInstance} from "../axios"
 import {useRouter} from "next/router"
 import {useErrorHandler} from "../hooks/useErrorHandler"
-import {Account} from "../../types"
-import {Button} from "./components/Button"
+import {Account} from "../../global-types"
+import {Button} from "../components/Button"
 
 const DeleteAccount = () => {
 	const [account, setAccount] = useState<Account>(null)

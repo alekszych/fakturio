@@ -12,7 +12,7 @@ export const OfferTable: FC <OfferTableTypes> = ({data, invoiceFiles, checked, s
 	}
 
 	return (
-		<table className="border-collapse bg-white text-left text-sm text-gray-500 overflow-auto min-w-[800px]">
+		<table className="border-collapse bg-white text-left text-sm text-gray-500 overflow-hidden min-w-[800px]">
 			<thead className="bg-gray-50">
 				<tr>
 					<th scope="col" className="px-6 py-4 font-medium text-gray-900"/>

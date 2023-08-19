@@ -1,5 +1,5 @@
 import {Dispatch, SetStateAction} from "react"
-import {Account} from "../../../types"
+import {Account} from "../../../global-types"
 
 export interface UseOnInputChangeTypes{
 	setState: Dispatch<SetStateAction<Account>>,

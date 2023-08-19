@@ -1,11 +1,11 @@
 import React, {useContext} from "react"
-import {AccountSelect} from "./components/AccountSelect"
 import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
-import {Button} from "./components/Button"
 import {useLogin} from "../hooks/useLogin"
 import {BsPersonFillAdd, BsPersonFillDash} from "react-icons/bs"
 import {FiLogIn} from "react-icons/fi"
+import {AccountSelect} from "../components/AccountSelect"
+import {Button} from "../components/Button"
 
 const Home = () => {
 	const router = useRouter()

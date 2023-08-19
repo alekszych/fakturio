@@ -1,5 +1,5 @@
-import {InvoiceFile, Offer} from "../../../../types"
 import {Dispatch, SetStateAction} from "react"
+import {InvoiceFile, Offer} from "../../../global-types"
 
 export interface OfferTableTypes {
 	data: Offer[],

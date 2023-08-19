@@ -1,10 +1,10 @@
 import React, {FC, useEffect, useState} from "react"
-import {useOnInputChange} from "../../../hooks/useOnInputChange"
 import {FormTypes} from "./Form.types"
 import {useRouter} from "next/router"
 import {Button} from "../Button"
 import {Select} from "../Select"
 import {Input} from "../Input"
+import {useOnInputChange} from "../../hooks/useOnInputChange"
 
 export const Form: FC<FormTypes> = ({title, fields, defaultValues, onSubmit}) => {
 	const router = useRouter()
@@ -38,6 +38,7 @@ export const Form: FC<FormTypes> = ({title, fields, defaultValues, onSubmit}) =>
 				)}
 			</div>
 
+			{/*TODO: fix "Anuluj" button*/}
 			<div className={"flex justify-end flex-wrap"}>
 				<Button className={"mx-2 mb-4"} onClick={() => router.push("/Home")} variant={"outline"}> Anuluj </Button>
 				<Button className={"mx-2"} onClick={(e) => onSubmit(e, formData)}> Zatwierdź </Button>

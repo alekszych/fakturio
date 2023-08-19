@@ -1,8 +1,8 @@
 import {Request, Response, Router} from "express"
 import axios from "axios"
 import {knex} from "../api"
-import {AccountData, Offer} from "../../types"
-import {Account} from "../../types"
+import {AccountData, Offer} from "../../global-types"
+import {Account} from "../../global-types"
 
 const fakturowniaRouter = Router()
 

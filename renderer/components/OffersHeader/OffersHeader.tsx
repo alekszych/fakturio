@@ -5,7 +5,7 @@ import {BsPersonGear} from "react-icons/bs"
 import {PiNoteDuotone} from "react-icons/pi"
 import {useRouter} from "next/router"
 import {OffersHeaderTypes} from "./OffersHeader.types"
-import {AuthContext} from "../../_app"
+import {AuthContext} from "../../pages/_app"
 
 export const OffersHeader: FC <OffersHeaderTypes> = ({handleCreateInvoices}) => {
 	const router = useRouter()
