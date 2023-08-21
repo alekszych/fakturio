@@ -21,12 +21,7 @@ export interface AccountData {
 	exemptTaxKind?: string
 }
 
-export interface InvoiceFile{
-	id: string,
-	file: string
-}
-
-export interface Invoice{
+export interface Address{
 	city: string,
 	companyName?: string | null
 	company?: {name: string, taxId: string} | null
@@ -52,11 +47,11 @@ export interface Product{
 }
 
 export interface Offer{
+	id: string,
 	client: string,
 	currency: string,
 	deliveryCost: string,
-	id: string,
-	invoice: Invoice,
+	address: Address,
 	products: Product[]
 }
 
@@ -66,7 +61,9 @@ export interface SimplifiedOffer{
 	products: Product[],
 	deliveryCost: string,
 	currency: string,
-	invoice: Invoice | null
+	address: Address | null,
+	invoiceFile: string | null,
+	invoiceStatus: "none" | "local" | "allegro"
 }
 
 export interface Error{
@@ -74,10 +71,11 @@ export interface Error{
 	errorMessage: String
 }
 
-export interface FormField{
+export interface FormField {
 	clientName: string,
 	devName: string,
 	optional?: boolean
 	size?: "normal" | "large"
 	options?: string[]
 }
+

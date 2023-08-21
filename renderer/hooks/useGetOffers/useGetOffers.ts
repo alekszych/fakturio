@@ -1,29 +1,38 @@
 import {axiosInstance} from "../../axios"
 import {useErrorHandler} from "../useErrorHandler"
 import {UseGetOffersTypes} from "./useGetOffers.types"
+import {SimplifiedOffer} from "../../../global-types"
 
 export const useGetOffers = async ({setData, setOffers, page, token}: UseGetOffersTypes) => {
-	const {data: responseData} = await axiosInstance.get("/allegro/offer", {params: {token: token}})
-	useErrorHandler({responseData: responseData, success: async () => {
+	const {data: fetchedOffers} = await axiosInstance.get("/allegro/offer", {params: {token: token}})
+	const {data: invoiceData} = await axiosInstance.get("/fakturownia/invoice")
+	useErrorHandler({responseData: fetchedOffers, success: async () => {
 		setData([])
-		const {checkoutForms: fetchedOffers} = responseData
 		setOffers(fetchedOffers)
 		fetchedOffers.filter((item, i) =>
 			(i >= page * 25) &&
 				(i < Math.min(((page + 1) * 25), (fetchedOffers.length - 1)))
 		).forEach(item => {
-			let obj = {
+			let obj: SimplifiedOffer = {
 				id: item.id,
 				client: item.buyer.login,
 				products: item.lineItems,
 				deliveryCost: item.delivery.cost.amount,
 				currency: item.summary.totalToPay.currency,
-				invoice: null
+				address: null,
+				invoiceFile: null,
+				invoiceStatus: item.status
 			}
 			if (item.invoice.required === true)
-				obj.invoice = item.invoice.address
+				obj.address = item.invoice.address
 			else
-				obj.invoice = item.delivery.address
+				obj.address = item.delivery.address
+			useErrorHandler({responseData: invoiceData, success: async () => {
+				const foundFile = invoiceData.find(invoice => invoice === item.id)
+				if(foundFile){
+					obj.invoiceFile = foundFile
+				}
+			}})
 			setData(data => data.concat(obj))
 		})
 	}})

@@ -1,13 +1,13 @@
-import React, {useContext, useEffect, useState} from "react"
+import React, {FC, useContext, useEffect, useState} from "react"
 import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
 import {axiosInstance} from "../axios"
 import {useErrorHandler} from "../hooks/useErrorHandler"
 import {AccountData, FormField} from "../../global-types"
-import {Form} from "../components/Form"
 import useHandleFormSubmit from "../hooks/useHandleFormSubmit/useHandleFormSubmit"
+import {Form} from "../components/Global/Form"
 
-const AccountData = () => {
+const AccountData: FC = () => {
 	const {account} = useContext(AuthContext)
 	const router = useRouter()
 	const [prevAccountData, setPrevAccountData] = useState<AccountData>()
@@ -42,10 +42,12 @@ const AccountData = () => {
 					accountId: account.id,
 				}
 				const {data: responseData} = await axiosInstance.post("/account/data", data)
-				useErrorHandler({responseData: responseData, success: async ()  =>  {
-					alert("Dane konta zostały zmienione")
-					await router.push("/Offers")
-				}})
+				useErrorHandler({
+					responseData: responseData, 
+					success: async ()  =>  {
+						alert("Dane konta zostały zmienione")
+						await router.push("/Offers")
+					}})
 			}
 		})
 	}

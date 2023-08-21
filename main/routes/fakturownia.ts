@@ -1,10 +1,45 @@
 import {Request, Response, Router} from "express"
 import axios from "axios"
 import {knex} from "../api"
-import {AccountData, Offer} from "../../global-types"
+import {AccountData, Address, Offer} from "../../global-types"
 import {Account} from "../../global-types"
+import * as fs from "fs"
+import path from "path"
+import {app} from "electron"
 
 const fakturowniaRouter = Router()
+
+fakturowniaRouter.get("/invoice", async (req: Request, res: Response) => {
+	try {
+		const invoices = await knex.select().from("invoice")
+		const data = invoices.map(invoice => invoice.id)
+		res.json(data)
+	}
+	catch (e) {
+		res.json({error: e.message, errorMessage: "Błąd podczas pobierania faktur"})
+	}
+})
+
+fakturowniaRouter.get("/invoice/file", async (req: Request<{}, {}, {}, {invoice: string}>, res: Response) => {
+	try {
+		const {invoice} = req.query
+		const filePath = path.join(path.join(app.getPath("userData") + `/invoices/${invoice}.pdf`))
+
+		fs.readFile(filePath, (err, data) => {
+			if (err) {
+				console.log(err)
+				throw new Error("Error reading file")
+			}
+			res.setHeader("Content-Type", "application/pdf")
+			res.setHeader("Content-Disposition", `attachment; filename=${invoice}.pdf`)
+			res.end(data)
+		})
+	}
+	catch (e) {
+		res.json({error: e.message, errorMessage: "Błąd podczas pobierania pliku"})
+	}
+})
+
 
 fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Offer[], account: Account}, {}>, res: Response) => {
 	try {
@@ -24,9 +59,8 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Offer[], a
 		}: AccountData = accountData[0]
 		const {fakturowniaToken, fakturowniaName} = accounts[0]
 
-		let invoices = []
-		for (const record of data) {
-			const positions = record.products.map(product => {
+		for (const {products, deliveryCost, currency, address, id} of data) {
+			const positions = products.map(product => {
 				return {
 					name: product.offer.name,
 					total_price_gross: product.price.amount,
@@ -38,14 +72,22 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Offer[], a
 
 			positions.push({
 				"name": "Koszty wysyłki",
-				"total_price_gross": record.deliveryCost,
+				"total_price_gross": deliveryCost,
 				"quantity": 1,
 				"lump_sum_tax": sellerLumpSumTax,
 				"tax": sellerVat
 			})
 
-			const currency = record.currency
-			const {firstName: buyerFirstname, lastName: buyerLastname, street: buyerStreet, city: buyerCity, zipCode: buyerZipCode, countryCode: buyerCountryCode, company: buyerCompany} = record.invoice
+			const {
+				firstName: buyerFirstname,
+				lastName: buyerLastname,
+				street: buyerStreet,
+				city: buyerCity,
+				zipCode: buyerZipCode,
+				countryCode: buyerCountryCode,
+				company: buyerCompany
+			}: Address = address
+
 			const invoice = {
 				"kind": "vat",
 				"seller_name": sellerName,
@@ -85,13 +127,19 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Offer[], a
 				headers: {"Content-Type": "application/json"}
 			})
 
-			invoices.push({
-				id: record.id,
-				file: `https://${fakturowniaName}.fakturownia.pl/invoices/${response.data.id}.pdf?api_token=${fakturowniaToken}`
+			const {data: fileData} = await axios.get(`https://${fakturowniaName}.fakturownia.pl/invoices/${response.data.id}.pdf?api_token=${fakturowniaToken}`, {responseType: "arraybuffer"})
+			const filePath = path.join(app.getPath("userData"), `/invoices/${id}.pdf`)
+			fs.writeFile(filePath, fileData, (err) => {
+				if(err){
+					throw Error(err.message)
+				}
+				knex("invoice").where("id", id).del().then(() => {
+					knex("invoice").insert({id: id, status: "local"}).then(() => {})
+				})
 			})
 		}
 
-		res.status(200).json(invoices)
+		res.status(200).json({message: "Faktury zostały utworzone"})
 	}
 	catch (e) {
 		res.json({error: e.message, errorMessage: "Błąd podczas tworzenia faktur"})

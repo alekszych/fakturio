@@ -4,7 +4,7 @@ import {axiosInstance} from "../axios"
 import {useErrorHandler} from "../hooks/useErrorHandler"
 import {FormField} from "../../global-types"
 import useHandleFormSubmit from "../hooks/useHandleFormSubmit/useHandleFormSubmit"
-import {Form} from "../components/Form"
+import {Form} from "../components/Global/Form"
 
 const AddAccount: FC = () => {
 	const router = useRouter()
@@ -25,7 +25,8 @@ const AddAccount: FC = () => {
 			success: async () => {
 				const {data: responseData} = await axiosInstance.post("/account", formData)
 				useErrorHandler({
-					responseData: responseData, success: async () => {
+					responseData: responseData,
+					success: async () => {
 						if (typeof window !== "undefined") {
 							await router.push("/Home")
 						}

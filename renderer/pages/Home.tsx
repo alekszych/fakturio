@@ -1,20 +1,25 @@
-import React, {useContext} from "react"
+import React, {FC, useContext, useEffect} from "react"
 import {AuthContext} from "./_app"
 import {useRouter} from "next/router"
 import {useLogin} from "../hooks/useLogin"
 import {BsPersonFillAdd, BsPersonFillDash} from "react-icons/bs"
 import {FiLogIn} from "react-icons/fi"
-import {AccountSelect} from "../components/AccountSelect"
-import {Button} from "../components/Button"
+import {AccountSelect} from "../components/Global/AccountSelect"
+import {Button} from "../components/Global/Button"
 
-const Home = () => {
+
+const Home: FC = () => {
 	const router = useRouter()
-	const {account, setAccount, setToken} = useContext(AuthContext)
-
+	const {account, setAccount, setToken, token} = useContext(AuthContext)
 	const handleLogin = async () => {
 		await useLogin({account: account, setToken: setToken})
-		await router.push("/Offers")
 	}
+
+	useEffect(() => {
+		if(token !== ""){
+			router.push("/Offers").then()
+		}
+	}, [token])
 
 	return (
 		<div className={"absolute left-2 right-2 top-2 bottom-2 m-auto h-fit w-4/5 max-w-2xl p-5 pb-10"}>

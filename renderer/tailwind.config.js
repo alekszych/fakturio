@@ -1,4 +1,5 @@
 const colors = require("tailwindcss/colors")
+const forms = require("@tailwindcss/forms")
 
 module.exports = {
 	content: [
@@ -11,8 +12,10 @@ module.exports = {
 			white: colors.white,
 			gray: colors.gray,
 			blue: colors.blue,
+			red: colors.red,
+			green: colors.green
 		},
 		extend: {},
 	},
-	plugins: [],
+	plugins: [forms],
 }

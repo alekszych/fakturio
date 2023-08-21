@@ -3,6 +3,9 @@ import axios from "axios"
 import base64 from "base-64"
 import {knex} from "../api"
 import {Account} from "../../global-types"
+import fs from "fs"
+import path from "path"
+import {app} from "electron"
 
 const allegroRouter = Router()
 
@@ -52,7 +55,7 @@ allegroRouter.get("/login", async (req: Request<{}, {}, {}, {account: Account}>,
 	}
 })
 
-allegroRouter.get("/offer", async (req: Request, res: Response) => {
+allegroRouter.get("/offer", async (req: Request<{}, {}, {}, {token: string}>, res: Response) => {
 	try {
 		const {token} = req.query
 		const {data} = await axios.get("https://api.allegro.pl/order/checkout-forms", {
@@ -61,7 +64,65 @@ allegroRouter.get("/offer", async (req: Request, res: Response) => {
 				"Accept": "application/vnd.allegro.public.v1+json"
 			}
 		})
-		res.status(200).json(data)
+
+		const dataWithInvoices = []
+
+		const invoices = await knex.select().from("invoice")
+		for (const item of data.checkoutForms) {
+			let status = "none"
+			const DbInvoice = invoices.find(invoice => invoice.id === item.id)
+			if(DbInvoice){
+				status = DbInvoice.status
+			}
+			if((DbInvoice && DbInvoice.status !== "allegro") || !DbInvoice){
+				const {data: invoiceData} = await axios.get(`https://api.allegro.pl/order/checkout-forms/${item.id}/invoices`, {
+					headers: {
+						"Accept": "application/vnd.allegro.public.v1+json",
+						"Authorization": `Bearer ${token}`
+					}
+				})
+				if(invoiceData.invoices.length !== 0){
+					status = "allegro"
+				}
+			}
+			const newItem = {...item, status: status}
+			await knex("invoice").where("id", item.id).del()
+			await knex("invoice").insert({id: item.id, status: status})
+			dataWithInvoices.push(newItem)
+		}
+
+		res.status(200).json(dataWithInvoices)
+	}
+	catch (e) {
+		res.json({error: e.message, errorMessage: "Błąd w pobieraniu ofert"})
+	}
+})
+
+allegroRouter.post("/invoice", async (req: Request<{}, {}, {token: string, invoice: string}>, res: Response) => {
+	try {
+		const {token, invoice} = req.body
+		
+		const {data: preInvoiceData} = await axios.post(
+			`https://api.allegro.pl/order/checkout-forms/${invoice}/invoices`,
+			{file: {
+				name: `${invoice}.pdf`,
+			}},
+			{headers: {
+				Accept: "application/vnd.allegro.public.v1+json",
+				"Content-Type": "application/vnd.allegro.public.v1+json",
+				Authorization: `Bearer ${token}`,
+			}})
+
+		await axios.put(
+			`https://api.allegro.pl/order/checkout-forms/${invoice}/invoices/${preInvoiceData.id}/file`,
+			fs.readFileSync(path.join(app.getPath("userData") + `/invoices/${invoice}.pdf`)),
+			{headers: {
+				"Accept": "application/vnd.allegro.public.v1+json",
+				"Content-Type": "application/pdf",
+				"Authorization": `Bearer ${token}`
+			}})
+
+		res.json({message: "Faktura została dodana do zamówienia"})
 	}
 	catch (e) {
 		res.json({error: e.message, errorMessage: "Błąd w pobieraniu ofert"})
