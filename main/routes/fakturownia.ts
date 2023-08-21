@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express"
 import axios from "axios"
 import {knex} from "../api"
-import {AccountData, Address, Offer} from "../../global-types"
+import {AccountData, Address, SimplifiedOffer} from "../../global-types"
 import {Account} from "../../global-types"
 import * as fs from "fs"
 import path from "path"
@@ -41,7 +41,7 @@ fakturowniaRouter.get("/invoice/file", async (req: Request<{}, {}, {}, {invoice:
 })
 
 
-fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Offer[], account: Account}, {}>, res: Response) => {
+fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: SimplifiedOffer[], account: Account}, {}>, res: Response) => {
 	try {
 		const {data, account} = req.body
 		const accountData = await knex.where("accountId", account.id).select().table("accountData")
@@ -59,7 +59,7 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Offer[], a
 		}: AccountData = accountData[0]
 		const {fakturowniaToken, fakturowniaName} = accounts[0]
 
-		for (const {products, deliveryCost, currency, address, id} of data) {
+		for (const {products, deliveryCost, currency, address, id, paymentType} of data) {
 			const positions = products.map(product => {
 				return {
 					name: product.offer.name,
@@ -102,7 +102,7 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Offer[], a
 				"buyer_country": buyerCountryCode,
 				"positions": positions,
 				"currency": currency,
-				"place": sellerCity
+				"place": sellerCity,
 			}
 
 			if (buyerFirstname) {
@@ -117,6 +117,14 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Offer[], a
 
 			if (sellerVat.toLowerCase() == "zw"){
 				invoice["exempt_tax_kind"] = sellerExemptTaxKind
+			}
+
+			if(paymentType === "CASH_ON_DELIVERY"){
+				invoice["payment_type"] = "Pobranie"
+			}
+
+			if(paymentType === "ONLINE"){
+				invoice["payment_type"] = "Przelew"
 			}
 
 			const response = await axios.post(`https://${fakturowniaName}.fakturownia.pl/invoices.json`, {

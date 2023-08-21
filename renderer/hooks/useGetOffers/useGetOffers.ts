@@ -21,8 +21,10 @@ export const useGetOffers = async ({setData, setOffers, page, token}: UseGetOffe
 				currency: item.summary.totalToPay.currency,
 				address: null,
 				invoiceFile: null,
-				invoiceStatus: item.status
+				invoiceStatus: item.status,
+				paymentType: item.payment.type
 			}
+			console.log(obj.paymentType)
 			if (item.invoice.required === true)
 				obj.address = item.invoice.address
 			else

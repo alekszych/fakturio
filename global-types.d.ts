@@ -63,7 +63,8 @@ export interface SimplifiedOffer{
 	currency: string,
 	address: Address | null,
 	invoiceFile: string | null,
-	invoiceStatus: "none" | "local" | "allegro"
+	invoiceStatus: "none" | "local" | "allegro",
+	paymentType: "CASH_ON_DELIVERY" | "ONLINE"
 }
 
 export interface Error{

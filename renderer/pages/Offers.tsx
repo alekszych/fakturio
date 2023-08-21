@@ -13,7 +13,6 @@ const Offers: FC = () => {
 	const [data, setData] = useState<SimplifiedOffer[]>([])
 	const [page, setPage] = useState(0)
 	const [checked, setChecked] = useState<Offer[]>([])
-	const [invoiceFiles, setInvoiceFiles] = useState<string[]>([])
 	const [offers, setOffers] = useState<Offer[]>([])
 
 	useEffect(() => {
@@ -44,7 +43,7 @@ const Offers: FC = () => {
 		<>
 			<OffersHeader handleCreateInvoices={handleCreateInvoices}/>
 			<div className="rounded-lg border border-gray-200 shadow-md overflow-auto min-w-[800px] mr-4">
-				<OffersTable invoiceFiles={invoiceFiles} checked={checked} setChecked={setChecked} data={data}/>
+				<OffersTable checked={checked} setChecked={setChecked} data={data}/>
 			</div>
 			<OffersFooter page={page} setPage={setPage} offers={offers}/>
 		</>

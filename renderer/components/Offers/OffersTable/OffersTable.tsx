@@ -58,7 +58,7 @@ export const OffersTable: FC <OffersTableTypes> = ({data, checked, setChecked}) 
 						</td>
 
 						<td className={"px-6 py-4 "}>
-							<TableAddress address={item.address}/>
+							<TableAddress item={item}/>
 						</td>
 
 

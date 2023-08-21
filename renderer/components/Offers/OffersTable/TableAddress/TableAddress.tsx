@@ -1,7 +1,8 @@
 import React, {FC} from "react"
 import {TableAddressTypes} from "./TableAdress.types"
 
-export const TableAddress: FC <TableAddressTypes> = ({address}) => {
+export const TableAddress: FC <TableAddressTypes> = ({item}) => {
+	const {address, paymentType} = item
 	if (!address){
 		return <> </>
 	}
@@ -16,15 +17,22 @@ export const TableAddress: FC <TableAddressTypes> = ({address}) => {
 		name = address.company.name + " " + address.company.taxId
 	}
 
-	// if ("naturalPerson" in address){
-	// 	name = address.naturalPerson.firstName + " " + address.naturalPerson.lastName
-	// }
+	let payment = ""
+
+	if(paymentType === "CASH_ON_DELIVERY"){
+		payment = "Za pobraniem"
+	}
+
+	if(paymentType === "ONLINE"){
+		payment = "Przelew"
+	}
 
 	return (
 		<>
 			<p> {name} </p>
 			<p> {address.street} </p>
 			<p> {address.zipCode} {address.city} {address.countryCode} </p>
+			<p> {payment} </p>
 		</>
 	)
 

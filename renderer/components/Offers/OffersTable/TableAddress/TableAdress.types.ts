@@ -1,5 +1,5 @@
-import {Address} from "../../../../../global-types"
+import {SimplifiedOffer} from "../../../../../global-types"
 
 export interface TableAddressTypes{
-	address: Address
+	item: SimplifiedOffer
 }
