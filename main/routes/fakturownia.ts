@@ -20,6 +20,22 @@ fakturowniaRouter.get("/invoice", async (req: Request, res: Response) => {
 	}
 })
 
+fakturowniaRouter.delete("/invoice", async (req: Request, res: Response) => {
+	try {
+		const {id} = req.query
+		await knex("invoice").where("id", id).del()
+		fs.unlink(path.join(app.getPath("userData"), `/invoices/${id}.pdf`), (e) => {
+			if(e) {
+				res.json({error: e.message, errorMessage: "Błąd podczas usuwania faktury"})
+			}
+			res.json({message: "Faktura została usunięta"})
+		})
+	}
+	catch (e) {
+		res.json({error: e.message, errorMessage: "Błąd podczas usuwania faktury"})
+	}
+})
+
 fakturowniaRouter.get("/invoice/file", async (req: Request<{}, {}, {}, {invoice: string}>, res: Response) => {
 	try {
 		const {invoice} = req.query
@@ -134,6 +150,8 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Simplified
 			{
 				headers: {"Content-Type": "application/json"}
 			})
+
+			console.log(response)
 
 			const {data: fileData} = await axios.get(`https://${fakturowniaName}.fakturownia.pl/invoices/${response.data.id}.pdf?api_token=${fakturowniaToken}`, {responseType: "arraybuffer"})
 			const filePath = path.join(app.getPath("userData"), `/invoices/${id}.pdf`)

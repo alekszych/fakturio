@@ -1,15 +1,16 @@
 import React, {FC, useContext, useState} from "react"
 import {OffersTableTypes} from "./OffersTable.types"
 import {LuSend} from "react-icons/lu"
-import {HiOutlineEye} from "react-icons/hi"
+import {HiOutlineEye, HiOutlineTrash} from "react-icons/hi"
 import {IoCheckmarkSharp, IoClose} from "react-icons/io5"
 import {AuthContext} from "../../../pages/_app"
 import {useSendInvoice} from "../../../hooks/useSendInvoice"
 import {DisplayPdf} from "../DisplayPdf"
 import {Checkbox} from "../../Global/Checkbox"
 import {TableAddress} from "./TableAddress"
+import {useDeleteInvoice} from "../../../hooks/useDeleteInvoice"
 
-export const OffersTable: FC <OffersTableTypes> = ({data, checked, setChecked}) => {
+export const OffersTable: FC <OffersTableTypes> = ({data, checked, setChecked, reloadInvoices}) => {
 	const [displayPDF, setDisplayPDF] = useState<string>("")
 	const {token} = useContext(AuthContext)
 
@@ -66,7 +67,8 @@ export const OffersTable: FC <OffersTableTypes> = ({data, checked, setChecked}) 
 							{item.invoiceStatus !== "allegro" && (item.invoiceStatus === "local" ?
 								<div className={"flex"}>
 									<button onClick={() => setDisplayPDF(item.invoiceFile)} className={"py-1 text-2xl text-blue-800"}> <HiOutlineEye/> </button>
-									<button onClick={() => useSendInvoice({token: token, invoice: item.invoiceFile})} className={"text-blue-800 px-3 py-1 text-2xl"}> <LuSend/> </button>
+									<button onClick={() => {useSendInvoice({token: token, invoice: item.invoiceFile}).then(); reloadInvoices()}} className={"text-blue-800 px-3 py-1 text-2xl"}> <LuSend/> </button>
+									<button onClick={() => {useDeleteInvoice({id: item.id}).then(); reloadInvoices()}} className={"text-blue-800 py-1 text-2xl"}> <HiOutlineTrash/> </button>
 								</div>
 								:
 								<div className="flex justify-center gap-4">

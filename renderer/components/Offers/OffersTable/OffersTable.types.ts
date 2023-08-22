@@ -4,5 +4,6 @@ import {Offer, SimplifiedOffer} from "../../../../global-types"
 export interface OffersTableTypes {
 	data: SimplifiedOffer[],
 	checked: Offer[],
-	setChecked: Dispatch<SetStateAction<Offer[]>>
+	setChecked: Dispatch<SetStateAction<Offer[]>>,
+	reloadInvoices: () => void
 }
