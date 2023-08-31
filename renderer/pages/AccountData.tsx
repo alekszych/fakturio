@@ -1,21 +1,21 @@
-import React, {FC, useContext, useEffect, useState} from "react"
-import {AuthContext} from "./_app"
+import React, {FC, useEffect, useState} from "react"
 import {useRouter} from "next/router"
 import {axiosInstance} from "../axios"
 import {useErrorHandler} from "../hooks/useErrorHandler"
 import {AccountData, FormField} from "../../global-types"
 import useHandleFormSubmit from "../hooks/useHandleFormSubmit/useHandleFormSubmit"
 import {Form} from "../components/Global/Form"
+import {useGetItem} from "../hooks/useGetItem"
 
 const AccountData: FC = () => {
-	const {account} = useContext(AuthContext)
+	const account = useGetItem("account")
 	const router = useRouter()
 	const [prevAccountData, setPrevAccountData] = useState<AccountData>()
 
 	useEffect(() => {
 		(async function() {
 			const {data: responseData} = await axiosInstance.get("/account/data", {params: {account: account}})
-			useErrorHandler({responseData: responseData, success: async () => setPrevAccountData(responseData[0])})
+			await useErrorHandler(responseData, async () => setPrevAccountData(responseData[0]))
 		})()
 	}, [])
 
@@ -32,24 +32,22 @@ const AccountData: FC = () => {
 	]
 
 	const handleSetUserData = async (event, accountData) => {
-		useHandleFormSubmit({
-			event: event,
-			data: accountData,
-			fields: fields,
-			success: async () => {
+		useHandleFormSubmit(
+			event,
+			accountData,
+			fields,
+			async () => {
 				const data: AccountData = {
 					...accountData,
 					accountId: account.id,
 				}
-				const {data: responseData} = await axiosInstance.post("/account/data", {data})
-				useErrorHandler({
-					responseData: responseData, 
-					success: async ()  =>  {
-						alert("Dane konta zostały zmienione")
-						await router.push("/Offers")
-					}})
+				const {data: responseData} = await axiosInstance.post("/account/data", data)
+				await useErrorHandler(responseData, async ()  =>  {
+					alert("Dane konta zostały zmienione")
+					await router.push("/Offers")
+				})
 			}
-		})
+		)
 	}
 
 	return (

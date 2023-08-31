@@ -1,17 +1,23 @@
 import {axiosInstance} from "../../axios"
 import {useErrorHandler} from "../useErrorHandler"
-import {UseGetOffersTypes} from "./useGetOffers.types"
-import {SimplifiedOffer} from "../../../global-types"
+import {Offer, SimplifiedOffer} from "../../../global-types"
+import React, {SetStateAction} from "react"
+import {useGetItem} from "../useGetItem"
 
-export const useGetOffers = async ({setData, setOffers, page, token}: UseGetOffersTypes) => {
+export const useGetOffers = async (
+	setData: React.Dispatch<SetStateAction<SimplifiedOffer[]>>, 
+	setOffers: React.Dispatch<SetStateAction<Offer[]>>, 
+	page: number
+) => {
+	const token = useGetItem("token")
 	const {data: fetchedOffers} = await axiosInstance.get("/allegro/offer", {params: {token: token}})
 	const {data: invoiceData} = await axiosInstance.get("/fakturownia/invoice")
 	let newData = []
-	useErrorHandler({responseData: fetchedOffers, success: async () => {
+	await useErrorHandler(fetchedOffers, async () => {
 		setOffers(fetchedOffers)
 		fetchedOffers.filter((item, i) =>
 			(i >= page * 25) &&
-				(i < Math.min(((page + 1) * 25), (fetchedOffers.length - 1)))
+			(i < Math.min(((page + 1) * 25), (fetchedOffers.length - 1)))
 		).forEach(item => {
 			let obj: SimplifiedOffer = {
 				id: item.id,
@@ -28,14 +34,15 @@ export const useGetOffers = async ({setData, setOffers, page, token}: UseGetOffe
 				obj.address = item.invoice.address
 			else
 				obj.address = item.delivery.address
-			useErrorHandler({responseData: invoiceData, success: async () => {
+			useErrorHandler(invoiceData, async () => {
 				const foundFile = invoiceData.find(invoice => invoice === item.id)
-				if(foundFile){
+				if (foundFile) {
 					obj.invoiceFile = foundFile
 				}
-			}})
+			}
+			)
 			newData.push(obj)
 		})
 		setData(newData)
-	}})
+	})
 }

@@ -1,6 +1,6 @@
-import {UseHandleFormSubmitTypes} from "./useHandleFormSubmit.types"
+import {FormField} from "../../../global-types"
 
-const UseHandleFormSubmit = ({event, data, fields, success} : UseHandleFormSubmitTypes) => {
+const UseHandleFormSubmit = (event: Event, data: object, fields: FormField[], success: () => Promise<void>) => {
 	event.preventDefault()
 	let error = false
 	if(!data){

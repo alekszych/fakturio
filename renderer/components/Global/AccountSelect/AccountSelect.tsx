@@ -1,23 +1,23 @@
 import React, {FC, useEffect, useState} from "react"
 import {Listbox} from "@headlessui/react"
-import {AccountSelectTypes} from "./AccountSelect.types"
 import {HiChevronUpDown} from "react-icons/hi2"
 import {Account} from "../../../../global-types"
 import {axiosInstance} from "../../../axios"
 import {useErrorHandler} from "../../../hooks/useErrorHandler"
+import {AccountSelectTypes} from "./AccountSelect.types"
 
 
-export const AccountSelect: FC <AccountSelectTypes> = ({account, setAccount}) => {
+export const AccountSelect: FC<AccountSelectTypes> = ({account, setAccount}) => {
 	const [accounts, setAccounts] = useState<Account[]>([])
 
 	useEffect(() => {
 		(async function() {
 			const {data: responseData}: {data: Error | Account[]} = await axiosInstance.get("/account")
-			useErrorHandler({responseData: responseData, success: async () => {
-				if(!Array.isArray(responseData))
+			await useErrorHandler(responseData, async () => {
+				if (!Array.isArray(responseData))
 					return
 				setAccounts(responseData)
-			}})
+			})
 		})()
 	}, [])
 

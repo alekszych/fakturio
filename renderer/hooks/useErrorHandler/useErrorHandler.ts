@@ -1,7 +1,6 @@
 "use client"
-import {UseErrorHandlerTypes} from "./useErrorHandler.types"
 
-export const useErrorHandler = ({responseData, success}: UseErrorHandlerTypes): any => {
+export const useErrorHandler = (responseData: {error: string, errorMessage: string} | any, success: () => Promise<any>) => {
 	if("error" in responseData){
 		console.log(responseData.error)
 		alert(responseData.errorMessage)

@@ -1,5 +1,5 @@
-import {UseSaveItemTypes} from "./useSaveItemTypes"
-
-export const useSaveItem = async ({name, value}: UseSaveItemTypes) => {
-	localStorage.setItem(name, value)
+export const useSaveItem = (name: string, value: string) => {
+	if(typeof window !== "undefined") {
+		localStorage.setItem(name, JSON.stringify(value))
+	}
 }

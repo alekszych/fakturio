@@ -5,10 +5,11 @@ import {AiOutlineOrderedList} from "react-icons/ai"
 import {FaRegAddressCard} from "react-icons/fa"
 import {LiaFileInvoiceSolid} from "react-icons/lia"
 import {useRouter} from "next/router"
-
+import {useGetItem} from "../../../hooks/useGetItem"
 
 export const Nav: FC = () => {
 	const router = useRouter()
+	const account = useGetItem("account")
 	const links = [
 		{name: "Zamówienia", icon: <AiOutlineOrderedList className={"text-3xl text-blue-800"}/>, href: "/Offers"},
 		{name: "Dane do faktur", icon: <FaRegAddressCard className={"text-2xl text-blue-800"}/>, href: "/AccountData"},
@@ -23,12 +24,12 @@ export const Nav: FC = () => {
 						<Image src={"/images/logo.png"} alt={"logo"} width={30} height={42}/>
 						<h3 className={"text-2xl font-semibold text-blue-800 ml-2"}> Fakturio </h3>
 					</div>
-					<p className={"font-semibold text-blue-800 mt-1.5"}> Witaj, tiffy78! </p>
+					<p className={"font-semibold text-blue-800 mt-1.5"}> Witaj, {account ? account.name : "użytkowniku"} </p>
 				</div>
 
 				<ul>
 					{links.map(link =>
-						<li className={"my-12 flex items-center content-center p-2 rounded hover:bg-gray-200 hover:text-blue-800"}
+						<li className={"my-12 flex items-center content-center p-2 rounded hover:bg-gray-200 hover:text-blue-800 hover:cursor-pointer"}
 						    key={link.name}
 						    onClick={() => router.push(link.href)}
 						>
@@ -40,13 +41,11 @@ export const Nav: FC = () => {
 					)}
 				</ul>
 
-				<div className={"flex items-center"}>
-					<a className={"flex items-center content-center p-2 rounded hover:bg-gray-200 hover:text-blue-800"} href={"/Home"}>
-						<div className={"flex items-center justify-center bg-gray-200 rounded h-[40px] w-[40px]"}>
-							<FiLogOut className={"text-3xl text-blue-800"}/>
-						</div>
-						<p className={"ml-2 font-medium"}> Wyloguj </p>
-					</a>
+				<div className={"flex items-center content-center p-2 rounded hover:bg-gray-200 hover:text-blue-800"} onClick={() => router.push("/Home")}>
+					<div className={"flex items-center justify-center bg-gray-200 rounded h-[40px] w-[40px]"}>
+						<FiLogOut className={"text-3xl text-blue-800"}/>
+					</div>
+					<p className={"ml-2 font-medium"}> Wyloguj </p>
 				</div>
 			</nav>
 		</div>

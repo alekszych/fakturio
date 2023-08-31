@@ -1,18 +1,21 @@
-import React, {FC, useContext} from "react"
-import {AuthContext} from "./_app"
+"use client"
+import React, {FC, useState} from "react"
 import {useRouter} from "next/router"
 import {useLogin} from "../hooks/useLogin"
 import {BsPersonFillAdd, BsPersonFillDash} from "react-icons/bs"
 import {FiLogIn} from "react-icons/fi"
 import {AccountSelect} from "../components/Global/AccountSelect"
 import {Button} from "../components/Global/Button"
+import {useGetItem} from "../hooks/useGetItem"
+import dynamic from "next/dynamic"
+import {useSaveItem} from "../hooks/useSaveItem"
 
-
-const Home: FC = () => {
+const NOSSRHome: FC = () => {
 	const router = useRouter()
-	const {account, setAccount, setToken} = useContext(AuthContext)
+	const [account, setAccount] = useState(useGetItem("account"))
 	const handleLogin = async () => {
-		await useLogin({account: account, setToken: setToken, router: router})
+		useSaveItem("account", account)
+		await useLogin(router)
 	}
 
 	return (
@@ -27,5 +30,9 @@ const Home: FC = () => {
 		</div>
 	)
 }
+
+const Home = dynamic(() => Promise.resolve(NOSSRHome), {
+	ssr: false
+})
 
 export default Home

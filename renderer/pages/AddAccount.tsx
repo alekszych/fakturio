@@ -18,21 +18,13 @@ const AddAccount: FC = () => {
 	]
 
 	const handleAddAccount = (event, formData) => {
-		useHandleFormSubmit({
-			event: event,
-			data: formData,
-			fields: fields,
-			success: async () => {
-				const {data: responseData} = await axiosInstance.post("/account", formData)
-				useErrorHandler({
-					responseData: responseData,
-					success: async () => {
-						if (typeof window !== "undefined") {
-							await router.push("/Home")
-						}
-					}
-				})
-			}
+		useHandleFormSubmit(event, formData, fields, async () => {
+			const {data: responseData} = await axiosInstance.post("/account", formData)
+			await useErrorHandler(responseData, async () => {
+				if (typeof window !== "undefined") {
+					await router.push("/Home")
+				}
+			})
 		})
 	}
 

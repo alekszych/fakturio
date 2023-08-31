@@ -1,7 +1,7 @@
-import React, {SetStateAction} from "react"
 import {Account} from "../../../../global-types"
+import {Dispatch, SetStateAction} from "react"
 
-export interface AccountSelectTypes {
+export interface AccountSelectTypes{
 	account: Account,
-	setAccount: React.Dispatch<SetStateAction<Account>>
+	setAccount: Dispatch<SetStateAction<Account>>
 }

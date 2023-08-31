@@ -1,40 +1,38 @@
-import React, {FC, useContext, useEffect, useState} from "react"
-import {AuthContext} from "./_app"
+import React, {FC, useEffect, useState} from "react"
 import {Offer, SimplifiedOffer} from "../../global-types"
 import {useGetOffers} from "../hooks/useGetOffers"
 import {useCreateInvoices} from "../hooks/useCreateInvoices"
 import {OffersHeader} from "../components/Offers/OffersHeader"
 import {OffersTable} from "../components/Offers/OffersTable"
 import {OffersFooter} from "../components/Offers/OffersFooter"
+import {useGetItem} from "../hooks/useGetItem"
 
 
 const Offers: FC = () => {
-	const {token, account} = useContext(AuthContext)
+	const token = useGetItem("token")
 	const [data, setData] = useState<SimplifiedOffer[]>([])
 	const [page, setPage] = useState(0)
 	const [checked, setChecked] = useState<Offer[]>([])
 	const [offers, setOffers] = useState<Offer[]>([])
 
-	console.log(token)
-
 	useEffect(() => {
 		(async () => {
 			if (!token)
 				return
-			await useGetOffers({setData: setData, setOffers: setOffers, page: page, token: token})
+			await useGetOffers(setData, setOffers, page)
 			setChecked([])
 		})()
 	}, [token, page])
 
 	const handleCreateInvoices = async () => {
 		setData([])
-		await useCreateInvoices({checked: checked, account: account})
-		await useGetOffers({setData: setData, setOffers: setOffers, page: page, token: token})
+		await useCreateInvoices(checked)
+		await useGetOffers(setData, setOffers, page)
 		setChecked([])
 	}
 
 	const handleReloadInvoices = async () => {
-		await useGetOffers({setData: setData, setOffers: setOffers, page: page, token: token})
+		await useGetOffers(setData, setOffers, page)
 	}
 
 	if (!data || data.length === 0) {

@@ -1,5 +1,5 @@
 appId: com.example.nextron
-productName: Importer faktur Allegro
+productName: Fakturio
 directories:
   output: dist
   buildResources: resources

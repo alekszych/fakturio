@@ -43,7 +43,6 @@ fakturowniaRouter.get("/invoice/file", async (req: Request<{}, {}, {}, {invoice:
 
 		fs.readFile(filePath, (err, data) => {
 			if (err) {
-				console.log(err)
 				throw new Error("Error reading file")
 			}
 			res.setHeader("Content-Type", "application/pdf")
@@ -62,7 +61,6 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Simplified
 		const {data, account} = req.body
 		const accountData = await knex.where("accountId", account.id).select().table("accountData")
 		const accounts = await knex.where("id", account.id).select().table("account")
-		console.log(accountData[0])
 		const {
 			"name": sellerName,
 			"taxNo": sellerTaxNo,
@@ -151,8 +149,6 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Simplified
 			{
 				headers: {"Content-Type": "application/json"}
 			})
-
-			console.log(invoice)
 
 			const {data: fileData} = await axios.get(`https://${fakturowniaName}.fakturownia.pl/invoices/${response.data.id}.pdf?api_token=${fakturowniaToken}`, {responseType: "arraybuffer"})
 			const filePath = path.join(app.getPath("userData"), `/invoices/${id}.pdf`)

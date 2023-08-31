@@ -4,8 +4,11 @@ import {HiChevronUpDown} from "react-icons/hi2"
 import {SelectTypes} from "./Select.types"
 
 export const Select: FC <SelectTypes> = ({formData, field, onChange}) => {
+	const handleOnChange = value => {
+		onChange({target: {name: field.devName, value: value}})
+	}
 	return (
-		<Listbox onChange={(value) => onChange({target: {name: field.devName, value: value}})}>
+		<Listbox onChange={handleOnChange}>
 			<div className="relative mt-2 w-[320px] rounded-xl bg-[#eff1fa] max-w-full border-2 border-gray-400">
 				<Listbox.Button className="relative rounded-xl bg-[#eff1fa] py-2 pr-10 pl-1.5 text-gray-900 focus:outline-none focus:ring-indigo-500 w-full">
 					<span className="flex items-center">
@@ -16,7 +19,8 @@ export const Select: FC <SelectTypes> = ({formData, field, onChange}) => {
 					</span>
 				</Listbox.Button>
 
-				<Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-xl bg-[#eff1fa] py-1 text-base focus:outline-none sm:text-sm">
+				<Listbox.Options
+					className="absolute z-10 mt-2 max-h-56 w-full overflow-auto rounded-xl bg-[#eff1fa] py-2 text-base focus:outline-none sm:text-sm border-2 border-gray-400">
 					{field.options.map((option) => (
 						<Listbox.Option
 							key={option}

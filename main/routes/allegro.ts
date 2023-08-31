@@ -9,13 +9,21 @@ import {app} from "electron"
 
 const allegroRouter = Router()
 
+let allegroBaseUrl = "https://allegro.pl"
+let allegroApiBaseUrl = "https://api.allegro.pl"
+// if(process.env.NODE_ENV !== "production"){
+// 	allegroBaseUrl = "https://allegro.pl.allegrosandbox.pl"
+// 	allegroApiBaseUrl = "https://api.allegro.pl.allegrosandbox.pl"
+// }
+
+
 allegroRouter.get("/token", async (req: Request<{}, {}, {}, {account: Account, deviceCode: string}>, res: Response) => {
 	try {
 		const {account, deviceCode} = req.query
 		const credentials = await knex.where("id", account.id).select().table("account")
 		const {allegroClientId, allegroClientSecret} = credentials[0]
 		const awaitCode = async () => {
-			return await axios.post(`https://allegro.pl/auth/oauth/token?grant_type=urn:ietf:params:oauth:grant-type:device_code&device_code=${deviceCode}`, null, {
+			return await axios.post(`${allegroBaseUrl}/auth/oauth/token?grant_type=urn:ietf:params:oauth:grant-type:device_code&device_code=${deviceCode}`, null, {
 				headers: {
 					"Authorization": `Basic ${base64.encode(`${allegroClientId}:${allegroClientSecret}`)}`,
 				}
@@ -39,7 +47,7 @@ allegroRouter.get("/login", async (req: Request<{}, {}, {}, {account: Account}>,
 		const {account} = req.query
 		const accounts = await knex.where("id", account.id).select().table("account")
 		const {allegroClientId, allegroClientSecret} = accounts[0]
-		const {data} = await axios.post("https://allegro.pl/auth/oauth/device", null, {
+		const {data} = await axios.post(`${allegroBaseUrl}/auth/oauth/device`, null, {
 			params: {
 				client_id: allegroClientId
 			},
@@ -58,7 +66,7 @@ allegroRouter.get("/login", async (req: Request<{}, {}, {}, {account: Account}>,
 allegroRouter.get("/offer", async (req: Request<{}, {}, {}, {token: string}>, res: Response) => {
 	try {
 		const {token} = req.query
-		const {data} = await axios.get("https://api.allegro.pl/order/checkout-forms", {
+		const {data} = await axios.get(`${allegroApiBaseUrl}/order/checkout-forms`, {
 			headers: {
 				"Authorization": `Bearer ${token}`,
 				"Accept": "application/vnd.allegro.public.v1+json"
@@ -75,7 +83,7 @@ allegroRouter.get("/offer", async (req: Request<{}, {}, {}, {token: string}>, re
 				status = DbInvoice.status
 			}
 			if((DbInvoice && DbInvoice.status !== "allegro") || !DbInvoice){
-				const {data: invoiceData} = await axios.get(`https://api.allegro.pl/order/checkout-forms/${item.id}/invoices`, {
+				const {data: invoiceData} = await axios.get(`${allegroApiBaseUrl}/order/checkout-forms/${item.id}/invoices`, {
 					headers: {
 						"Accept": "application/vnd.allegro.public.v1+json",
 						"Authorization": `Bearer ${token}`
@@ -102,7 +110,7 @@ allegroRouter.post("/invoice", async (req: Request<{}, {}, {token: string, invoi
 		const {token, invoice} = req.body
 		
 		const {data: preInvoiceData} = await axios.post(
-			`https://api.allegro.pl/order/checkout-forms/${invoice}/invoices`,
+			`${allegroApiBaseUrl}/order/checkout-forms/${invoice}/invoices`,
 			{file: {
 				name: `${invoice}.pdf`,
 			}},
@@ -113,7 +121,7 @@ allegroRouter.post("/invoice", async (req: Request<{}, {}, {token: string, invoi
 			}})
 
 		await axios.put(
-			`https://api.allegro.pl/order/checkout-forms/${invoice}/invoices/${preInvoiceData.id}/file`,
+			`${allegroApiBaseUrl}/order/checkout-forms/${invoice}/invoices/${preInvoiceData.id}/file`,
 			fs.readFileSync(path.join(app.getPath("userData") + `/invoices/${invoice}.pdf`)),
 			{headers: {
 				"Accept": "application/vnd.allegro.public.v1+json",
