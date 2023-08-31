@@ -27,13 +27,13 @@ export const AccountSelect: FC<AccountSelectTypes> = ({account, setAccount}) => 
 
 	if (accounts){
 		return (
-			<div className={"m-auto w-[400px] max-w-full"}>
+			<div className={"m-auto max-w-full"}>
 				<Listbox value={account} onChange={setAccount}>
-					<Listbox.Label className="text-xl">Wybierz konto</Listbox.Label>
+					<Listbox.Label className="text-xl font-medium">Wybierz konto</Listbox.Label>
 					<div className="relative mt-2">
 						<Listbox.Button className="relative cursor-default rounded-xl bg-white border-2 border-blue-800 py-2 pl-2 pr-10 text-left text-sm focus:outline-none focus:ring-indigo-500 sm:leading-6 w-full">
 							<span className="flex items-center">
-								<span className="ml-3 block truncate">{account ? account.name : "Wybierz konto"}</span>
+								<span className="ml-3 block truncate font-semibold">{account ? account.name : "Wybierz konto"}</span>
 							</span>
 							<span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
 								<HiChevronUpDown className="h-5 w-5" aria-hidden="true" />
@@ -49,7 +49,7 @@ export const AccountSelect: FC<AccountSelectTypes> = ({account, setAccount}) => 
 								>
 									<div className="flex items-center">
 										<span className={"ml-3 truncate flex"}>
-											<p className={"mr-3"}> {account.name} </p>
+											<p className={"mr-3 font-semibold"}> {account.name} </p>
 										</span>
 									</div>
 								</Listbox.Option>

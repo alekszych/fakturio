@@ -19,8 +19,19 @@ const NOSSRHome: FC = () => {
 	}
 
 	return (
-		<div className={"absolute left-2 right-2 top-2 bottom-2 m-auto h-fit w-4/5 max-w-2xl p-5 pb-10"}>
-			<h1 className={"text-3xl mx-auto text-center mb-5"}>Import faktur - Allegro</h1>
+		<div className={"absolute left-2 right-2 top-2 bottom-2 m-auto h-fit w-[560px] p-5 pb-10 max-w-full"}>
+			<div className={"mx-auto flex items-center w-full mb-3"}>
+				<img src={"/images/logo.png"} width={100} alt={""} className={"mr-2"}/>
+				<div>
+					<h1 className={"text-3xl font-semibold mb-2"}>
+						<span className={"text-blue-800"}>Hej, </span>
+						jestem
+						<span className={"text-blue-800"}> fakturio</span>
+						.
+					</h1>
+					<h2 className={"text-xl font-medium"}> Jestem twoim pomocnikiem do faktur Allegro</h2>
+				</div>
+			</div>
 			<AccountSelect account={account} setAccount={setAccount}/>
 			<div className={"flex mt-8 justify-center flex-wrap"}>
 				<Button className={"mx-2 mb-4"} onClick={() => router.push("/AddAccount")}> <BsPersonFillAdd className={"mr-2 text-xl"}/> <p className={"text-sm py-1"}> Dodaj nowe konto </p> </Button>
