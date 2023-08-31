@@ -6,7 +6,7 @@ import {SelectTypes} from "./Select.types"
 export const Select: FC <SelectTypes> = ({formData, field, onChange}) => {
 	return (
 		<Listbox onChange={(value) => onChange({target: {name: field.devName, value: value}})}>
-			<div className="relative mt-2 w-[320px] rounded-xl bg-[#eff1fa] max-w-full">
+			<div className="relative mt-2 w-[320px] rounded-xl bg-[#eff1fa] max-w-full border-2 border-gray-400">
 				<Listbox.Button className="relative rounded-xl bg-[#eff1fa] py-2 pr-10 pl-1.5 text-gray-900 focus:outline-none focus:ring-indigo-500 w-full">
 					<span className="flex items-center">
 						<span className="ml-3 block truncate">{field.devName in formData ? formData[field.devName] : "Wybierz"}</span>

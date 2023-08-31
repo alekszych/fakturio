@@ -62,25 +62,26 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Simplified
 		const {data, account} = req.body
 		const accountData = await knex.where("accountId", account.id).select().table("accountData")
 		const accounts = await knex.where("id", account.id).select().table("account")
+		console.log(accountData[0])
 		const {
-			name: sellerName,
-			taxNo: sellerTaxNo,
-			street: sellerStreet,
-			postCode: sellerPostCode,
-			city: sellerCity,
-			country: sellerCountry,
-			lumpSumTax: sellerLumpSumTax,
-			vat: sellerVat,
-			exemptTaxKind: sellerExemptTaxKind
+			"name": sellerName,
+			"taxNo": sellerTaxNo,
+			"street": sellerStreet,
+			"postCode": sellerPostCode,
+			"city": sellerCity,
+			"country": sellerCountry,
+			"lumpSumTax": sellerLumpSumTax,
+			"vat": sellerVat,
+			"exemptTaxKind": sellerExemptTaxKind
 		}: AccountData = accountData[0]
 		const {fakturowniaToken, fakturowniaName} = accounts[0]
 
 		for (const {products, deliveryCost, currency, address, id, paymentType} of data) {
 			const positions = products.map(product => {
 				return {
-					name: product.offer.name,
-					total_price_gross: product.price.amount,
-					quantity: product.quantity,
+					"name": product.offer.name,
+					"total_price_gross": product.price.amount,
+					"quantity": product.quantity,
 					"lump_sum_tax": sellerLumpSumTax,
 					"tax": sellerVat
 				}
@@ -95,13 +96,13 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Simplified
 			})
 
 			const {
-				firstName: buyerFirstname,
-				lastName: buyerLastname,
-				street: buyerStreet,
-				city: buyerCity,
-				zipCode: buyerZipCode,
-				countryCode: buyerCountryCode,
-				company: buyerCompany
+				"firstName": buyerFirstname,
+				"lastName": buyerLastname,
+				"street": buyerStreet,
+				"city": buyerCity,
+				"zipCode": buyerZipCode,
+				"countryCode": buyerCountryCode,
+				"company": buyerCompany
 			}: Address = address
 
 			const invoice = {
@@ -151,7 +152,7 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Simplified
 				headers: {"Content-Type": "application/json"}
 			})
 
-			console.log(response)
+			console.log(invoice)
 
 			const {data: fileData} = await axios.get(`https://${fakturowniaName}.fakturownia.pl/invoices/${response.data.id}.pdf?api_token=${fakturowniaToken}`, {responseType: "arraybuffer"})
 			const filePath = path.join(app.getPath("userData"), `/invoices/${id}.pdf`)

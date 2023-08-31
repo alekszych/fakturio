@@ -15,6 +15,8 @@ const Offers: FC = () => {
 	const [checked, setChecked] = useState<Offer[]>([])
 	const [offers, setOffers] = useState<Offer[]>([])
 
+	console.log(token)
+
 	useEffect(() => {
 		(async () => {
 			if (!token)
@@ -37,7 +39,7 @@ const Offers: FC = () => {
 
 	if (!data || data.length === 0) {
 		return (
-			<div className={"absolute left-5 right-5 top-5 bottom-5 flex m-auto w-fit h-fit flex-col items-center content-center text-white text-xl"}>
+			<div className={"absolute left-5 right-5 top-5 bottom-5 flex m-auto w-fit h-fit flex-col items-center content-center text-xl"}>
 				Ładowanie
 			</div>
 		)

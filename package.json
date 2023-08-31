@@ -2,7 +2,7 @@
   "private": true,
   "name": "importer-faktur-allegro",
   "description": "Aplikacja importujaca faktury z allegro do fakturowni",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "author": "Aleks Zych",
   "main": "app/background.js",
   "scripts": {
@@ -34,7 +34,7 @@
     "@types/react": "^18.0.26",
     "@typescript-eslint/eslint-plugin": "^6.3.0",
     "@typescript-eslint/parser": "^6.3.0",
-    "electron": "^21.3.3",
+    "electron": "27.0.0-alpha.1",
     "electron-builder": "^23.6.0",
     "eslint": "^8.47.0",
     "next": "^12.3.4",

@@ -41,7 +41,7 @@ const AccountData: FC = () => {
 					...accountData,
 					accountId: account.id,
 				}
-				const {data: responseData} = await axiosInstance.post("/account/data", data)
+				const {data: responseData} = await axiosInstance.post("/account/data", {data})
 				useErrorHandler({
 					responseData: responseData, 
 					success: async ()  =>  {

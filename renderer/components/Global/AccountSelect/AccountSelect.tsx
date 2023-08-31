@@ -21,8 +21,8 @@ export const AccountSelect: FC <AccountSelectTypes> = ({account, setAccount}) =>
 		})()
 	}, [])
 
-	if(accounts && accounts.length === 0){
-		return <p className={"text-white text-xl m-auto flex w-fit"}> Nie dodałeś/aś jeszcze żadnego konta </p>
+	if(!accounts || (accounts && accounts.length === 0)){
+		return <p className={"text-xl m-auto flex w-fit"}> Nie dodałeś/aś jeszcze żadnego konta : ( </p>
 	}
 
 	if (accounts){

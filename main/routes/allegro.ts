@@ -90,7 +90,6 @@ allegroRouter.get("/offer", async (req: Request<{}, {}, {}, {token: string}>, re
 			await knex("invoice").insert({id: item.id, status: status})
 			dataWithInvoices.push(newItem)
 		}
-
 		res.status(200).json(dataWithInvoices)
 	}
 	catch (e) {

@@ -6,8 +6,8 @@ import {SimplifiedOffer} from "../../../global-types"
 export const useGetOffers = async ({setData, setOffers, page, token}: UseGetOffersTypes) => {
 	const {data: fetchedOffers} = await axiosInstance.get("/allegro/offer", {params: {token: token}})
 	const {data: invoiceData} = await axiosInstance.get("/fakturownia/invoice")
+	let newData = []
 	useErrorHandler({responseData: fetchedOffers, success: async () => {
-		setData([])
 		setOffers(fetchedOffers)
 		fetchedOffers.filter((item, i) =>
 			(i >= page * 25) &&
@@ -24,7 +24,6 @@ export const useGetOffers = async ({setData, setOffers, page, token}: UseGetOffe
 				invoiceStatus: item.status,
 				paymentType: item.payment.type
 			}
-			console.log(obj.paymentType)
 			if (item.invoice.required === true)
 				obj.address = item.invoice.address
 			else
@@ -35,7 +34,8 @@ export const useGetOffers = async ({setData, setOffers, page, token}: UseGetOffe
 					obj.invoiceFile = foundFile
 				}
 			}})
-			setData(data => data.concat(obj))
+			newData.push(obj)
 		})
+		setData(newData)
 	}})
 }
