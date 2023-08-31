@@ -19,7 +19,7 @@ if (isProd) {
 	mainWindow = createWindow("main", {
 		width: 1300,
 		height: 800,
-		title: "Importer faktur Allegro",
+		title: "Fakturio",
 	})
 
 	if (isProd) {

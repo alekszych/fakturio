@@ -29,7 +29,7 @@ const NOSSRHome: FC = () => {
 						<span className={"text-blue-800"}> fakturio</span>
 						.
 					</h1>
-					<h2 className={"text-xl font-medium"}> Jestem twoim pomocnikiem do faktur Allegro</h2>
+					<h2 className={"text-xl font-medium"}> Jestem twoim pomocnikiem do faktur Allegro.</h2>
 				</div>
 			</div>
 			<AccountSelect account={account} setAccount={setAccount}/>

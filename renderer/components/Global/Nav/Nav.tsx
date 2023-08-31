@@ -1,5 +1,4 @@
 import React, {FC} from "react"
-import Image from "next/image"
 import {FiLogOut} from "react-icons/fi"
 import {AiOutlineOrderedList} from "react-icons/ai"
 import {FaRegAddressCard} from "react-icons/fa"
@@ -21,10 +20,12 @@ export const Nav: FC = () => {
 			<nav className={"h-[100vh] min-w-[230px] flex flex-col justify-between px-6 py-8 bg-white fixed border-r-2 border-gray-200 shadow-md"}>
 				<div>
 					<div className={"flex items-center"}>
-						<Image src={"/images/logo.png"} alt={"logo"} width={30} height={42}/>
-						<h3 className={"text-2xl font-semibold text-blue-800 ml-2"}> Fakturio </h3>
+						<img src={"/images/logo.png"} alt={"logo"} width={50}/>
+						<div className={"ml-2"}>
+							<h3 className={"text-2xl font-semibold text-blue-800"}> Witaj! </h3>
+							<p className={"font-medium"}> {account ? account.name : "użytkowniku"} </p>
+						</div>
 					</div>
-					<p className={"font-semibold text-blue-800 mt-1.5"}> Witaj, {account ? account.name : "użytkowniku"} </p>
 				</div>
 
 				<ul>
