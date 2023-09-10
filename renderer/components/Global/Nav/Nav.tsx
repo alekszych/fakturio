@@ -12,7 +12,7 @@ export const Nav: FC = () => {
 	const links = [
 		{name: "Zamówienia", icon: <AiOutlineOrderedList className={"text-3xl text-blue-800"}/>, href: "/Offers"},
 		{name: "Dane do faktur", icon: <FaRegAddressCard className={"text-2xl text-blue-800"}/>, href: "/AccountData"},
-		{name: "Pola faktury", icon: <LiaFileInvoiceSolid className={"text-3xl text-blue-800"}/>,  href: "/Home"}
+		// {name: "Pola faktury", icon: <LiaFileInvoiceSolid className={"text-3xl text-blue-800"}/>,  href: "/Home"}
 	]
 
 	return (

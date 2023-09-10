@@ -11,10 +11,10 @@ const allegroRouter = Router()
 
 let allegroBaseUrl = "https://allegro.pl"
 let allegroApiBaseUrl = "https://api.allegro.pl"
-// if(process.env.NODE_ENV !== "production"){
-// 	allegroBaseUrl = "https://allegro.pl.allegrosandbox.pl"
-// 	allegroApiBaseUrl = "https://api.allegro.pl.allegrosandbox.pl"
-// }
+if(process.env.NODE_ENV !== "production"){
+	allegroBaseUrl = "https://allegro.pl.allegrosandbox.pl"
+	allegroApiBaseUrl = "https://api.allegro.pl.allegrosandbox.pl"
+}
 
 
 allegroRouter.get("/token", async (req: Request<{}, {}, {}, {account: Account, deviceCode: string}>, res: Response) => {
