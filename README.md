@@ -1,6 +1,10 @@
 # Aplikacja importująca zamówienia z allegro i tworząca na ich podstawie faktury w serwisie fakturownia
 
+## Pobierz:
+https://mega.nz/file/KEchBCrA#hExamtzKMZR3-7vNLXJMKvTtc_bi82jiuqoekciWdHM
+
 ## Ekran startowy
+
 <img width="1478" alt="Screenshot 2023-09-10 at 21 18 19" src="https://github.com/alekszych/faktury/assets/31969098/8336b6b3-6a3c-4cd7-85f5-97727e136f1d">
 
 ## Dodanie konta
