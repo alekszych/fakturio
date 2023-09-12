@@ -7,7 +7,7 @@ import {Dispatch} from "react"
 import {SimpleAccount} from "../../../global-types"
 
 export const useLogin = async (account: SimpleAccount, router: NextRouter, dispatch: Dispatch<any>) => {
-	const {data: loginResponseData} = await axiosInstance.get("/allegro/login", {params: {account: account}})
+	const {data: loginResponseData} = await axiosInstance.get(`/allegro/login/${account.id}`)
 	await useErrorHandler(loginResponseData, async () => {
 		await shell.openExternal(loginResponseData.verification_uri_complete)
 		shell.beep()
@@ -19,9 +19,7 @@ export const useLogin = async (account: SimpleAccount, router: NextRouter, dispa
 		})
 		await useErrorHandler(tokenResponseData, async () => {
 			dispatch(handleSetToken(tokenResponseData.access_token))
-			const {data: accountDataResponseData} = await axiosInstance.get("/account/data", {
-				params: {account: account}
-			})
+			const {data: accountDataResponseData} = await axiosInstance.get(`/account/data/${account.id}`)
 			await useErrorHandler(accountDataResponseData, async () => {
 				if (accountDataResponseData && accountDataResponseData.length === 0) {
 					await router.push("/AccountData")

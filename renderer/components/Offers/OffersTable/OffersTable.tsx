@@ -23,7 +23,7 @@ export const OffersTable: FC <OffersTableTypes> = ({data, checked, setChecked, r
 	}
 
 	if(displayPDF !== ""){
-		return (<DisplayPdf invoice={displayPDF} close={() => setDisplayPDF("")}/>)
+		return (<DisplayPdf invoiceId={displayPDF} close={() => setDisplayPDF("")}/>)
 	}
 
 	return (

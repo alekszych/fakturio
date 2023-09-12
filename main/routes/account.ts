@@ -1,6 +1,6 @@
 import {Router} from "express"
 import {knex} from "../api"
-import {Account, AccountData, SimpleAccount} from "../../global-types"
+import {Account, AccountData} from "../../global-types"
 import {Request, Response} from "express"
 const accountRouter = Router()
 
@@ -32,11 +32,11 @@ accountRouter.post("/", async (req: Request, res: Response) => {
 	}
 })
 
-accountRouter.delete("/", async (req: Request<{}, {}, {}, {account: SimpleAccount}>, res: Response) => {
+accountRouter.delete("/:accountId", async (req: Request<{accountId: string}>, res: Response) => {
 	try {
-		const {account} = req.query
-		await knex("accountData").where("accountId", account.id).del()
-		await knex("account").where("id", account.id).del()
+		const {accountId} = req.params
+		await knex("accountData").where("accountId", accountId).del()
+		await knex("account").where("id", accountId).del()
 		res.status(200).json({message: "Dane logowania zostały zmienione"})
 	}
 	catch (e) {
@@ -70,10 +70,10 @@ accountRouter.post("/data", async (req: Request, res: Response) => {
 	}
 })
 
-accountRouter.get("/data", async (req: Request<{}, {}, {}, {account: Account}>, res: Response) => {
+accountRouter.get("/data/:accountId", async (req: Request<{accountId: string}>, res: Response) => {
 	try {
-		const {account} = req.query
-		const data = await knex.where("accountId", account.id).select().table("accountData")
+		const {accountId} = req.params
+		const data = await knex.where("accountId", accountId).select().table("accountData")
 		res.status(200).json(data)
 	}
 	catch (e) {

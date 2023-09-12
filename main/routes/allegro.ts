@@ -42,10 +42,10 @@ allegroRouter.get("/token", async (req: Request<{}, {}, {}, {account: Account, d
 	}
 })
 
-allegroRouter.get("/login", async (req: Request<{}, {}, {}, {account: Account}>, res: Response) => {
+allegroRouter.get("/login/:accountId", async (req: Request<{accountId: string}>, res: Response) => {
 	try {
-		const {account} = req.query
-		const accounts = await knex.where("id", account.id).select().table("account")
+		const {accountId} = req.params
+		const accounts = await knex.where("id", accountId).select().table("account")
 		const {allegroClientId, allegroClientSecret} = accounts[0]
 		const {data} = await axios.post(`${allegroBaseUrl}/auth/oauth/device`, null, {
 			params: {

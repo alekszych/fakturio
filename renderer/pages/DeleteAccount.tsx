@@ -13,7 +13,7 @@ const DeleteAccount = () => {
 	const [account, setAccount] = useState<SimpleAccount>(useSelector((state: any) => state.account))
 	const router = useRouter()
 	const handleAccountDelete = async () => {
-		const {data: responseData} = await axiosInstance.delete("/account", {params: {account: account}})
+		const {data: responseData} = await axiosInstance.delete(`/account/${account.id}`)
 		await useErrorHandler(responseData, async () => {
 			await router.push("/Home")
 			dispatch(handleSetAccount({id: "", name: ""}))

@@ -1,4 +1,4 @@
 export interface DisplayPdfTypes{
-	invoice: string,
+	invoiceId: string,
 	close: () => void
 }

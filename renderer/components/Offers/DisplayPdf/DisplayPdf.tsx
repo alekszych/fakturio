@@ -7,7 +7,7 @@ import {DisplayPdfTypes} from "./DisplayPdf.types"
 import {GrFormClose} from "react-icons/gr"
 import {axiosInstance} from "../../../axios"
 
-export const DisplayPdf: FC <DisplayPdfTypes> = ({invoice, close}) => {
+export const DisplayPdf: FC <DisplayPdfTypes> = ({invoiceId, close}) => {
 	const [file, setFile] = useState("")
 	const [height, setHeight] = useState<number>(500)
 	const [scale, setScale] = useState(1)
@@ -22,9 +22,8 @@ export const DisplayPdf: FC <DisplayPdfTypes> = ({invoice, close}) => {
 			})
 			resizeObserver.observe(ref.current)
 			try{
-				const {data: invoiceFile} = await axiosInstance.get("/fakturownia/invoice/file", {params: {invoice: invoice}, responseType: "arraybuffer"})
+				const {data: invoiceFile} = await axiosInstance.get(`/fakturownia/invoice/file/${invoiceId}`, {responseType: "arraybuffer"})
 				const b = new Blob([invoiceFile], {type: "application/pdf"})
-				console.log(b, window.URL.createObjectURL(b))
 				setFile(window.URL.createObjectURL(b))
 			}
 			catch (e) {

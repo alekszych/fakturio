@@ -26,7 +26,6 @@ if (isProd) {
 		const port = process.argv[2]
 		await mainWindow.loadURL(`http://localhost:${port}/Home`)
 		mainWindow.webContents.openDevTools()
-		console.log(app.getPath("userData"))
 	}
 })()
 

@@ -14,7 +14,7 @@ const AccountData: FC = () => {
 
 	useEffect(() => {
 		(async function() {
-			const {data: responseData} = await axiosInstance.get("/account/data", {params: {account: account}})
+			const {data: responseData} = await axiosInstance.get(`/account/data/${account.id}`)
 			await useErrorHandler(responseData, async () => setPrevAccountData(responseData[0]))
 		})()
 	}, [])

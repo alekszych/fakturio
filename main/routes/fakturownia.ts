@@ -19,11 +19,11 @@ fakturowniaRouter.get("/invoice", async (req: Request, res: Response) => {
 	}
 })
 
-fakturowniaRouter.delete("/invoice", async (req: Request, res: Response) => {
+fakturowniaRouter.delete("/invoice/:invoiceId", async (req: Request<{invoiceId: string}>, res: Response) => {
 	try {
-		const {id} = req.query
-		await knex("invoice").where("id", id).del()
-		fs.unlink(path.join(app.getPath("userData"), `/invoices/${id}.pdf`), (e) => {
+		const {invoiceId} = req.params
+		await knex("invoice").where("id", invoiceId).del()
+		fs.unlink(path.join(app.getPath("userData"), `/invoices/${invoiceId}.pdf`), (e) => {
 			if(e) {
 				res.json({error: e.message, errorMessage: "Błąd podczas usuwania faktury"})
 			}
@@ -35,17 +35,17 @@ fakturowniaRouter.delete("/invoice", async (req: Request, res: Response) => {
 	}
 })
 
-fakturowniaRouter.get("/invoice/file", async (req: Request<{}, {}, {}, {invoice: string}>, res: Response) => {
+fakturowniaRouter.get("/invoice/file/:invoiceId", async (req: Request<{invoiceId: string}>, res: Response) => {
 	try {
-		const {invoice} = req.query
-		const filePath = path.join(path.join(app.getPath("userData") + `/invoices/${invoice}.pdf`))
+		const {invoiceId} = req.params
+		const filePath = path.join(path.join(app.getPath("userData") + `/invoices/${invoiceId}.pdf`))
 
 		fs.readFile(filePath, (err, data) => {
 			if (err) {
 				throw new Error("Error reading file")
 			}
 			res.setHeader("Content-Type", "application/pdf")
-			res.setHeader("Content-Disposition", `attachment; filename=${invoice}.pdf`)
+			res.setHeader("Content-Disposition", `attachment; filename=${invoiceId}.pdf`)
 			res.end(data)
 		})
 	}
@@ -55,7 +55,7 @@ fakturowniaRouter.get("/invoice/file", async (req: Request<{}, {}, {}, {invoice:
 })
 
 
-fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: SimplifiedOffer[], account: SimpleAccount}, {}>, res: Response) => {
+fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: SimplifiedOffer[], account: SimpleAccount}>, res: Response) => {
 	try {
 		const {data, account} = req.body
 		const accountData = await knex.where("accountId", account.id).select().table("accountData")
