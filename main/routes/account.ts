@@ -1,6 +1,6 @@
 import {Router} from "express"
 import {knex} from "../api"
-import {Account, AccountData} from "../../global-types"
+import {Account, AccountData, SimpleAccount} from "../../global-types"
 import {Request, Response} from "express"
 const accountRouter = Router()
 
@@ -32,7 +32,7 @@ accountRouter.post("/", async (req: Request, res: Response) => {
 	}
 })
 
-accountRouter.delete("/", async (req: Request<{}, {}, {}, {account: Account}>, res: Response) => {
+accountRouter.delete("/", async (req: Request<{}, {}, {}, {account: SimpleAccount}>, res: Response) => {
 	try {
 		const {account} = req.query
 		await knex("accountData").where("accountId", account.id).del()

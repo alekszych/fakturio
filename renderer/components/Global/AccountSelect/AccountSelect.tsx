@@ -33,7 +33,7 @@ export const AccountSelect: FC<AccountSelectTypes> = ({account, setAccount}) => 
 					<div className="relative mt-2">
 						<Listbox.Button className="relative cursor-default rounded-xl bg-white border-2 border-blue-800 py-2 pl-2 pr-10 text-left text-sm focus:outline-none focus:ring-indigo-500 sm:leading-6 w-full">
 							<span className="flex items-center">
-								<span className="ml-3 block truncate font-semibold">{account ? account.name : "Wybierz konto"}</span>
+								<span className="ml-3 block truncate font-semibold">{(account && account.id !== "") ? account.name : "Wybierz konto"}</span>
 							</span>
 							<span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
 								<HiChevronUpDown className="h-5 w-5" aria-hidden="true" />
@@ -45,7 +45,7 @@ export const AccountSelect: FC<AccountSelectTypes> = ({account, setAccount}) => 
 								<Listbox.Option
 									key={account.id}
 									className={({active}) => active ? "bg-indigo-600 text-blue-800 relative cursor-default select-none py-2 pl-3 pr-9" : "text-gray-900 relative cursor-default select-none py-2 pl-3 pr-9"}
-									value={account}
+									value={{id: account.id, name: account.name}}
 								>
 									<div className="flex items-center">
 										<span className={"ml-3 truncate flex"}>

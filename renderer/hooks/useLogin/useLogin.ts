@@ -2,11 +2,11 @@ import {axiosInstance} from "../../axios"
 import {useErrorHandler} from "../useErrorHandler"
 import {shell} from "electron"
 import {NextRouter} from "next/router"
-import {useSaveItem} from "../useSaveItem"
-import {useGetItem} from "../useGetItem"
+import {handleSetToken} from "../../store/slices/tokenSlice"
+import {Dispatch} from "react"
+import {SimpleAccount} from "../../../global-types"
 
-export const useLogin = async (router: NextRouter) => {
-	const account = useGetItem("account")
+export const useLogin = async (account: SimpleAccount, router: NextRouter, dispatch: Dispatch<any>) => {
 	const {data: loginResponseData} = await axiosInstance.get("/allegro/login", {params: {account: account}})
 	await useErrorHandler(loginResponseData, async () => {
 		await shell.openExternal(loginResponseData.verification_uri_complete)
@@ -18,7 +18,7 @@ export const useLogin = async (router: NextRouter) => {
 			}
 		})
 		await useErrorHandler(tokenResponseData, async () => {
-			useSaveItem("token", tokenResponseData.access_token)
+			dispatch(handleSetToken(tokenResponseData.access_token))
 			const {data: accountDataResponseData} = await axiosInstance.get("/account/data", {
 				params: {account: account}
 			})

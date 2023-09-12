@@ -6,16 +6,17 @@ import {BsPersonFillAdd, BsPersonFillDash} from "react-icons/bs"
 import {FiLogIn} from "react-icons/fi"
 import {AccountSelect} from "../components/Global/AccountSelect"
 import {Button} from "../components/Global/Button"
-import {useGetItem} from "../hooks/useGetItem"
-import dynamic from "next/dynamic"
-import {useSaveItem} from "../hooks/useSaveItem"
+import {useDispatch, useSelector} from "react-redux"
+import {handleSetAccount} from "../store/slices/accountSlice"
+import {SimpleAccount} from "../../global-types"
 
-const NOSSRHome: FC = () => {
+const Home: FC = () => {
+	const dispatch = useDispatch()
 	const router = useRouter()
-	const [account, setAccount] = useState(useGetItem("account"))
+	const [account, setAccount] = useState<SimpleAccount>(useSelector((state: any) => state.account))
 	const handleLogin = async () => {
-		useSaveItem("account", account)
-		await useLogin(router)
+		dispatch(handleSetAccount(account))
+		await useLogin(account, router, dispatch)
 	}
 
 	return (
@@ -41,9 +42,5 @@ const NOSSRHome: FC = () => {
 		</div>
 	)
 }
-
-const Home = dynamic(() => Promise.resolve(NOSSRHome), {
-	ssr: false
-})
 
 export default Home

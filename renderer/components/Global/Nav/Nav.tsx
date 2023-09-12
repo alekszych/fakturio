@@ -4,11 +4,11 @@ import {AiOutlineOrderedList} from "react-icons/ai"
 import {FaRegAddressCard} from "react-icons/fa"
 import {LiaFileInvoiceSolid} from "react-icons/lia"
 import {useRouter} from "next/router"
-import {useGetItem} from "../../../hooks/useGetItem"
+import {useSelector} from "react-redux"
 
 export const Nav: FC = () => {
 	const router = useRouter()
-	const account = useGetItem("account")
+	const account = useSelector((state: any) => state.account)
 	const links = [
 		{name: "Zamówienia", icon: <AiOutlineOrderedList className={"text-3xl text-blue-800"}/>, href: "/Offers"},
 		{name: "Dane do faktur", icon: <FaRegAddressCard className={"text-2xl text-blue-800"}/>, href: "/AccountData"},

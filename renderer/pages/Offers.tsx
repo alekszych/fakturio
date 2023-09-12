@@ -5,11 +5,11 @@ import {useCreateInvoices} from "../hooks/useCreateInvoices"
 import {OffersHeader} from "../components/Offers/OffersHeader"
 import {OffersTable} from "../components/Offers/OffersTable"
 import {OffersFooter} from "../components/Offers/OffersFooter"
-import {useGetItem} from "../hooks/useGetItem"
-
+import {useSelector} from "react-redux"
 
 const Offers: FC = () => {
-	const token = useGetItem("token")
+	const token = useSelector((state: any) => state.token.value)
+	const account = useSelector((state: any) => state.account)
 	const [data, setData] = useState<SimplifiedOffer[]>([])
 	const [page, setPage] = useState(0)
 	const [checked, setChecked] = useState<Offer[]>([])
@@ -19,20 +19,20 @@ const Offers: FC = () => {
 		(async () => {
 			if (!token)
 				return
-			await useGetOffers(setData, setOffers, page)
+			await useGetOffers(setData, setOffers, page, token)
 			setChecked([])
 		})()
 	}, [token, page])
 
 	const handleCreateInvoices = async () => {
 		setData([])
-		await useCreateInvoices(checked)
-		await useGetOffers(setData, setOffers, page)
+		await useCreateInvoices(checked, account)
+		await useGetOffers(setData, setOffers, page, token)
 		setChecked([])
 	}
 
 	const handleReloadInvoices = async () => {
-		await useGetOffers(setData, setOffers, page)
+		await useGetOffers(setData, setOffers, page, token)
 	}
 
 	if (!data || data.length === 0) {

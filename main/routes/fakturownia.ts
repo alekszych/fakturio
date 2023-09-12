@@ -1,8 +1,7 @@
 import {Request, Response, Router} from "express"
 import axios from "axios"
 import {knex} from "../api"
-import {AccountData, Address, SimplifiedOffer} from "../../global-types"
-import {Account} from "../../global-types"
+import {AccountData, Address, SimpleAccount, SimplifiedOffer} from "../../global-types"
 import * as fs from "fs"
 import path from "path"
 import {app} from "electron"
@@ -56,7 +55,7 @@ fakturowniaRouter.get("/invoice/file", async (req: Request<{}, {}, {}, {invoice:
 })
 
 
-fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: SimplifiedOffer[], account: Account}, {}>, res: Response) => {
+fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: SimplifiedOffer[], account: SimpleAccount}, {}>, res: Response) => {
 	try {
 		const {data, account} = req.body
 		const accountData = await knex.where("accountId", account.id).select().table("accountData")

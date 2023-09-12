@@ -80,3 +80,8 @@ export interface FormField {
 	options?: string[]
 }
 
+export interface SimpleAccount{
+	id: string,
+	name: string
+}
+

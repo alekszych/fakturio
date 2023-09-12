@@ -3,9 +3,7 @@ import serve from "electron-serve"
 import api from "./api"
 import {createWindow} from "./helpers"
 const isProd = process.env.NODE_ENV === "production"
-
 const server = api()
-let mainWindow
 
 if (isProd) {
 	serve({directory: "app"})
@@ -16,7 +14,7 @@ if (isProd) {
 (async () => {
 	await app.whenReady()
 
-	mainWindow = createWindow("main", {
+	const mainWindow = createWindow("main", {
 		width: 1300,
 		height: 800,
 		title: "Fakturio",
@@ -28,6 +26,7 @@ if (isProd) {
 		const port = process.argv[2]
 		await mainWindow.loadURL(`http://localhost:${port}/Home`)
 		mainWindow.webContents.openDevTools()
+		console.log(app.getPath("userData"))
 	}
 })()
 

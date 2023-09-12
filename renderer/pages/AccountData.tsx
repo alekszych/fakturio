@@ -5,10 +5,10 @@ import {useErrorHandler} from "../hooks/useErrorHandler"
 import {AccountData, FormField} from "../../global-types"
 import useHandleFormSubmit from "../hooks/useHandleFormSubmit/useHandleFormSubmit"
 import {Form} from "../components/Global/Form"
-import {useGetItem} from "../hooks/useGetItem"
+import {useSelector} from "react-redux"
 
 const AccountData: FC = () => {
-	const account = useGetItem("account")
+	const account = useSelector((state: any) => state.account)
 	const router = useRouter()
 	const [prevAccountData, setPrevAccountData] = useState<AccountData>()
 

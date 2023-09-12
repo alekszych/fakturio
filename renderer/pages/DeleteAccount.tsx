@@ -2,20 +2,21 @@ import React, {useState} from "react"
 import {axiosInstance} from "../axios"
 import {useRouter} from "next/router"
 import {useErrorHandler} from "../hooks/useErrorHandler"
-import {Account} from "../../global-types"
+import {SimpleAccount} from "../../global-types"
 import {AccountSelect} from "../components/Global/AccountSelect"
 import {Button} from "../components/Global/Button"
-import {useGetItem} from "../hooks/useGetItem"
-import {useSaveItem} from "../hooks/useSaveItem"
+import {useDispatch, useSelector} from "react-redux"
+import {handleSetAccount} from "../store/slices/accountSlice"
 
 const DeleteAccount = () => {
-	const [account, setAccount] = useState<Account>(useGetItem("account"))
+	const dispatch = useDispatch()
+	const [account, setAccount] = useState<SimpleAccount>(useSelector((state: any) => state.account))
 	const router = useRouter()
 	const handleAccountDelete = async () => {
 		const {data: responseData} = await axiosInstance.delete("/account", {params: {account: account}})
 		await useErrorHandler(responseData, async () => {
 			await router.push("/Home")
-			useSaveItem("account", "")
+			dispatch(handleSetAccount({id: "", name: ""}))
 			alert("Konto zostało usunięte")
 		})
 	}

@@ -2,14 +2,13 @@ import {axiosInstance} from "../../axios"
 import {useErrorHandler} from "../useErrorHandler"
 import {Offer, SimplifiedOffer} from "../../../global-types"
 import React, {SetStateAction} from "react"
-import {useGetItem} from "../useGetItem"
 
 export const useGetOffers = async (
 	setData: React.Dispatch<SetStateAction<SimplifiedOffer[]>>, 
 	setOffers: React.Dispatch<SetStateAction<Offer[]>>, 
-	page: number
+	page: number,
+	token: string
 ) => {
-	const token = useGetItem("token")
 	const {data: fetchedOffers} = await axiosInstance.get("/allegro/offer", {params: {token: token}})
 	const {data: invoiceData} = await axiosInstance.get("/fakturownia/invoice")
 	let newData = []
