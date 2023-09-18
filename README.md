@@ -35,5 +35,4 @@ https://mega.nz/file/KEchBCrA#hExamtzKMZR3-7vNLXJMKvTtc_bi82jiuqoekciWdHM
 <img width="1478" alt="Screenshot 2023-09-10 at 21 19 42" src="https://github.com/alekszych/faktury/assets/31969098/bf2d2182-d1e9-41f9-a7ec-30fbe7774d8f">
 
 ## Dodanie faktur do allegro
-<img width="1478" alt="Screenshot 2023-09-10 at 21 20 08" src="https://github.com/alekszych/faktury/assets/31969098/e8c0a743-1632-416a-bbd6-9a59fa997914">
 <img width="1478" alt="Screenshot 2023-09-10 at 21 37 17" src="https://github.com/alekszych/faktury/assets/31969098/457e007c-12f4-44d4-83aa-7f9150ed6644">
