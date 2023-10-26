@@ -1,8 +1,8 @@
 {
   "private": true,
   "name": "fakturio",
-  "description": "Aplikacja importujaca faktury z allegro do fakturowni",
-  "version": "1.5.0",
+  "description": "Pomocnik do faktur Allegro",
+  "version": "1.6.0",
   "author": "Aleks Zych",
   "main": "app/background.js",
   "scripts": {

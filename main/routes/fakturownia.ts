@@ -38,7 +38,7 @@ fakturowniaRouter.delete("/invoice/:invoiceId", async (req: Request<{invoiceId: 
 fakturowniaRouter.get("/invoice/file/:invoiceId", async (req: Request<{invoiceId: string}>, res: Response) => {
 	try {
 		const {invoiceId} = req.params
-		const filePath = path.join(path.join(app.getPath("userData") + `/invoices/${invoiceId}.pdf`))
+		const filePath = path.join(app.getPath("userData"), `/invoices/${invoiceId}.pdf`)
 
 		fs.readFile(filePath, (err, data) => {
 			if (err) {
@@ -75,9 +75,10 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Simplified
 
 		for (const {products, deliveryCost, currency, address, id, paymentType} of data) {
 			const positions = products.map(product => {
+				const price = parseFloat(product.price.amount) * product.quantity
 				return {
 					"name": product.offer.name,
-					"total_price_gross": product.price.amount,
+					"total_price_gross": price,
 					"quantity": product.quantity,
 					"lump_sum_tax": sellerLumpSumTax,
 					"tax": sellerVat
@@ -86,7 +87,7 @@ fakturowniaRouter.post("/invoice", async (req: Request<{}, {}, {data: Simplified
 
 			positions.push({
 				"name": "Koszty wysyłki",
-				"total_price_gross": deliveryCost,
+				"total_price_gross": parseFloat(deliveryCost),
 				"quantity": 1,
 				"lump_sum_tax": sellerLumpSumTax,
 				"tax": sellerVat
